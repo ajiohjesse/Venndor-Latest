@@ -1,0 +1,32 @@
+.toggler {
+  cursor: pointer;
+  width: 35px;
+  height: 20px;
+  border-radius: 50px;
+  overflow: hidden;
+  background-color: var(--fff);
+  border: 1px solid var(--text-faded);
+  position: relative;
+}
+
+.toggler.active {
+  background-color: var(--primary);
+  border-color: transparent;
+}
+
+.knob {
+  margin: 2px;
+  width: 15px;
+  height: calc(100% - 4px);
+  border-radius: 10px;
+  background-color: var(--text-faded);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 180ms ease;
+}
+
+.knob.active {
+  left: 40%;
+  background-color: var(--white);
+}

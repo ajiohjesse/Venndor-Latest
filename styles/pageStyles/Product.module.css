@@ -1,0 +1,79 @@
+.wrapper {
+  width: 100%;
+  padding: 5rem 0;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+  background-color: var(--fff);
+  box-shadow: var(--shadow-color);
+  padding: 2rem;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  height: 100%;
+}
+
+.image {
+  position: relative;
+  height: 300px;
+}
+
+.image > span {
+  z-index: 1;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.details > h2 {
+  font-size: 2.4rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.price {
+  font-size: 3rem;
+  color: var(--price);
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.textGroup {
+  margin-bottom: 1.6rem;
+}
+
+.textGroup > span:first-child {
+  font-weight: 500;
+}
+
+.textLink {
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.bottom {
+  margin-top: 3rem;
+}
+
+.description > h3 {
+  font-size: 2.4rem;
+  font-weight: 500;
+}
+
+.request {
+  margin-top: 4rem;
+}
+
+.request > h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}

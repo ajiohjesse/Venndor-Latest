@@ -1,0 +1,160 @@
+.menu {
+  list-style: none;
+  padding-bottom: 3rem;
+  border-bottom: 2px solid var(--text-faded2);
+}
+
+.menu > h2 {
+  margin-bottom: 1.4rem;
+  font-weight: 500;
+  font-size: 1.8rem;
+  color: var(--text-muted);
+}
+
+.menu > li {
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  height: 40px;
+  transition: var(--transition);
+}
+
+.menu > li > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu > li::after {
+  content: "";
+  width: 5px;
+  height: 100%;
+  border-radius: 100px;
+  transition: var(--transition-slow);
+}
+
+.menu > li:hover {
+  transform: translateX(0.8rem);
+}
+
+.menu > li:hover::after {
+  background-color: var(--text-faded);
+}
+
+.menu > li.active::after {
+  background-color: var(--primary);
+}
+
+.itemIcon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+}
+
+.itemIcon[data-name="marketplace"] {
+  background-color: var(--primary);
+}
+.itemIcon[data-name="product"] {
+  background-color: var(--success);
+}
+.itemIcon[data-name="store"] {
+  background-color: var(--violet);
+}
+
+.menuIcon {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+  color: var(--white);
+}
+.menu {
+  list-style: none;
+}
+
+.menu > h2 {
+  margin-bottom: 1.4rem;
+  font-weight: 500;
+  font-size: 1.8rem;
+  color: var(--text-muted);
+}
+
+.menu > li {
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  height: 40px;
+  transition: var(--transition);
+}
+
+.menu > li > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu > li::after {
+  content: "";
+  width: 5px;
+  height: 100%;
+  border-radius: 100px;
+  transition: var(--transition);
+}
+
+.menu > li:hover {
+  transform: translateX(0.8rem);
+}
+
+.menu > li:hover::after {
+  background-color: var(--text-faded);
+}
+
+/* .menu > li.active::after {
+  background-color: var(--primary);
+} */
+
+/* .menu > li[data-id="home"].home::after {
+  background-color: var(--primary);
+}
+.menu > li[data-id="products"].products::after {
+  background-color: var(--primary);
+}
+.menu > li[data-id="home"].stores::after {
+  background-color: var(--primary);
+} */
+
+.itemIcon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+}
+
+.itemIcon[data-name="marketplace"] {
+  background-color: var(--primary);
+}
+.itemIcon[data-name="product"] {
+  background-color: var(--success);
+}
+.itemIcon[data-name="store"] {
+  background-color: var(--violet);
+}
+
+.menuIcon {
+  width: 18px;
+  height: 18px;
+  object-fit: cover;
+  color: var(--white);
+}
+
+/* Media Query for Laptops and Desktops */
+@media (max-width: 1024px) {
+}

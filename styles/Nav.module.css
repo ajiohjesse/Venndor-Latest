@@ -1,0 +1,279 @@
+.nav {
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(45deg, var(--bg), var(--fff));
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 98;
+  padding: 0 20px 0 320px;
+  box-shadow: var(--shadow-color);
+}
+
+.container {
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 3fr 50px 1fr;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 300px;
+  background-color: var(--fff);
+  z-index: 99;
+  box-shadow: var(--shadow-color);
+  transition: left 200ms ease;
+}
+
+.asideContainer {
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.asideScroll {
+  height: 80vh;
+  padding: 0 1rem;
+  margin-top: 3rem;
+  overflow-y: scroll;
+  direction: rtl;
+}
+
+.asideScroll > div {
+  direction: ltr;
+}
+
+.asideScroll::-webkit-scrollbar {
+  width: 6px;
+  background-color: var(--text-faded);
+}
+.asideScroll::-webkit-scrollbar-thumb {
+  background-color: var(--text-faded);
+}
+.asideScroll::-webkit-scrollbar-button {
+  background-color: var(--text-faded);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 80px;
+  font-size: 3rem;
+  font-weight: bold;
+  position: relative;
+}
+
+.logo > button {
+  position: absolute;
+  right: 0;
+  display: none;
+}
+
+#logo2 {
+  display: none;
+}
+
+.logoIcon {
+  position: relative;
+  height: calc(100% - 30px);
+  aspect-ratio: 1/1;
+  cursor: pointer;
+}
+
+.search {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 1rem;
+  align-items: center;
+}
+
+.info {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+#info2 {
+  display: none;
+}
+
+.navIcons {
+  display: flex;
+  justify-self: right;
+  align-items: center;
+  gap: 2rem;
+  font-size: 2.4rem;
+  color: var(--text);
+}
+
+.navIcons > button {
+  background-color: transparent;
+  padding: 5px 10px;
+  transition: var(--transition);
+}
+
+.navIcons > button:hover {
+  transform: scale(0.9);
+}
+
+.userIcon {
+  color: var(--primary);
+}
+
+.menuBars {
+  color: var(--text);
+}
+
+.user {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: right;
+}
+
+.userImg {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--text-faded);
+}
+
+.userDetails > h2 {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.userDetails > h2::before {
+  content: "@";
+}
+.userDetails > a {
+  color: var(--primary);
+}
+
+.userDetails > a:hover {
+  text-decoration: underline;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.buttons > a {
+  color: var(--primary);
+  display: flex;
+  gap: 1rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.buttons > a:hover {
+  text-decoration: underline;
+  transform: scale(1.1);
+}
+
+/* Media Query for low resolution  Tablets, Ipads */
+@media (max-width: 481px) {
+  .container {
+    display: flex;
+    width: 100%;
+    justify-content: right;
+  }
+
+  .navIcons {
+    font-size: 2rem;
+  }
+  .navIcons > button {
+    padding: 0 4px;
+  }
+
+  #logo2 {
+    width: 50%;
+  }
+
+  #logo2 > h1 {
+    display: none;
+  }
+
+  .logoIcon {
+    position: relative;
+    height: calc(100% - 40px);
+    aspect-ratio: 1/1;
+  }
+
+  .logo > button {
+    display: block;
+  }
+}
+
+/* Media Query for Tablets Ipads portrait mode */
+@media (max-width: 768px) {
+  .search {
+    display: none;
+  }
+
+  .container {
+    grid-template-columns: 1fr 50px 200px;
+  }
+
+  .navIcons {
+    justify-self: left;
+    gap: 2rem;
+  }
+}
+
+/* Media Query for Laptops and Desktops */
+@media (max-width: 1280px) {
+  .aside {
+    left: -400px;
+  }
+
+  .aside.active {
+    left: 0;
+  }
+
+  #logo2 {
+    display: flex;
+  }
+
+  .nav {
+    padding: 0 20px;
+  }
+
+  .container {
+    grid-template-columns: 200px 3fr 50px 1fr;
+  }
+
+  .info {
+    display: none;
+  }
+
+  #info2 {
+    display: contents;
+  }
+
+  .search {
+    grid-template-columns: 1fr 70px;
+  }
+
+  .search > button > span {
+    display: none;
+  }
+}

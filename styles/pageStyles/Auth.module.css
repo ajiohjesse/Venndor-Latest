@@ -1,0 +1,67 @@
+.container {
+  width: 75%;
+  margin: 0 auto;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+}
+
+.container > h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin-bottom: 3rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.error {
+  color: var(--danger);
+  width: 90%;
+  background-color: #ffadad00;
+  max-width: 500px;
+  margin-bottom: 4rem;
+  animation: scale-in 500ms ease;
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.container > form {
+  width: 100%;
+  max-width: 500px;
+  display: grid;
+  gap: 3rem;
+}
+
+.link {
+  margin-top: 2rem;
+}
+
+.link > a,
+.info > a {
+  color: var(--primary);
+}
+
+.link > a:hover,
+.info > a:hover {
+  color: var(--primary2);
+  text-decoration: underline;
+}
+
+.info {
+  max-width: 500px;
+  margin-bottom: 4rem;
+}
+
+.infoIcon {
+  color: var(--violet);
+  font-size: 2rem;
+  margin-right: 1rem;
+}

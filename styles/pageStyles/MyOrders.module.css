@@ -1,0 +1,148 @@
+.listed {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 5rem 0;
+}
+
+.wrapper {
+  width: 90%;
+  margin: 0 auto 5rem;
+}
+
+.container {
+  /* max-height: 460px; */
+  margin: 0 auto;
+  overflow: auto;
+}
+
+.container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: var(--text-faded);
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: var(--text-faded);
+}
+
+.container::-webkit-scrollbar-corner {
+  background-color: var(--text-faded);
+}
+
+.column {
+  width: 100%;
+  /* min-width: max-content; */
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.heading > button {
+  border: none;
+  background-color: transparent;
+  color: var(--info);
+}
+
+.heading > h2 {
+  font-weight: 500;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.heading > h2 > span {
+  color: var(--info);
+}
+
+.colorIcon {
+  padding: 0.5rem;
+  margin-right: 1rem;
+}
+
+.colorIcon[data-name="listedProducts"] {
+  background-color: var(--info);
+}
+
+.colorIcon[data-name="pendingOrders"] {
+  background-color: var(--warning);
+}
+
+.colorIcon[data-name="processingOrders"] {
+  background-color: var(--violet);
+}
+
+.colorIcon[data-name="completedOrders"] {
+  background-color: var(--success);
+}
+
+.pageTitle {
+  width: 90%;
+  margin: 0 auto;
+  padding: 4rem 0 2rem;
+  font-weight: 700;
+  font-size: 2.4rem;
+}
+
+.filter {
+  margin: 0 auto 3rem;
+  width: 90%;
+}
+
+.filter > h2 {
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.buttons {
+  display: flex;
+  /* flex-wrap: wrap; */
+  gap: 2rem;
+}
+
+@media (max-width: 500px) {
+  .buttons {
+    flex-wrap: wrap;
+  }
+}
+
+.listProductWrapper {
+  width: 100%;
+  padding-top: 4rem;
+}
+
+.listProduct {
+  width: 90%;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 2px dashed var(--primary);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.listProduct > button {
+  font-weight: 500;
+}
+
+.storeName {
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 5rem;
+  font-size: 2.4rem;
+  font-weight: 700;
+  display: flex;
+  gap: 2rem;
+}
+
+.storeName > span {
+  font-weight: 400;
+  color: var(--primary);
+}
+
+.wrapper > button {
+  margin-top: 4rem;
+}

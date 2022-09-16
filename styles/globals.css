@@ -1,0 +1,192 @@
+* {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: rgb(243, 244, 246);
+}
+
+:root {
+  font-size: 62.5%;
+
+  /* shadows */
+  --shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  /* transitions */
+  --transition: all 300ms ease;
+  --transition-slow: all 500ms ease;
+
+  /* widths */
+  --container-width: 90%;
+  --max-width: 2000px;
+
+  /* UI colors */
+  --primary: #155aee;
+  --primary2: #124dcb;
+
+  --success: #33c15d;
+  --success2: #2ba44f;
+
+  --danger: #fc3030;
+  --danger2: #d72929;
+
+  --warning: #febd01;
+  --warning2: #d8a101;
+
+  --warning3: #b2ad10;
+  --brown: #bd561d;
+  --pink: #bf4b8a;
+  --violet: #8957e5;
+  --sky: #3aafb3;
+  --gold: #ffd500;
+
+  --white: #fbfcfc;
+  --pure-white: #fff;
+  --white-faded: #fbfcfc31;
+  --white-faded2: #fbfcfc0e;
+  --white-muted: #cae3ffbd;
+  /* --white2: #dde9fa; */
+  --white2: #dde9fa54;
+
+  --black: #191b26;
+  --pure-black: #131520;
+  --black-faded: #191b2631;
+  --black-faded2: #191b260e;
+  --black-muted: #0e3253;
+  --black2: #010511;
+
+  --text-dark: #bbbdc7;
+  --grey: #4f5368;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 1.6rem;
+}
+
+body,
+body[data-theme="light"] {
+  /* color variables */
+  --bg: var(--white);
+  --bg2: var(--white2);
+  --fff: var(--pure-white);
+
+  --text: var(--black);
+  --text2: var(--black2);
+  --text-faded: var(--black-faded);
+  --text-faded2: var(--black-faded2);
+  --text-muted: var(--black-muted);
+
+  --price: var(--danger);
+
+  --shadow-color: 0 0 8px var(--text-faded);
+
+  background-color: var(--bg);
+  color: var(--text);
+  transition: var(--transition);
+}
+
+body[data-theme="dark"] {
+  /* color variables */
+  --bg: var(--black);
+  --bg2: var(--black2);
+  --fff: var(--pure-black);
+
+  --text: var(--text-dark);
+  --text2: var(--white2);
+
+  --text-faded: var(--white-faded);
+  --text-faded2: var(--white-faded2);
+  --text-muted: var(--white-muted);
+
+  --price: var(--warning);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  font-size: 1em;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  -webkit-appearance: button;
+  text-transform: none;
+  cursor: pointer;
+  background-color: transparent;
+  background-image: none;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.section {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 5rem 0;
+}
+
+.card {
+  margin-top: 4rem;
+  width: 300px;
+  padding: 2rem;
+  background-color: var(--fff);
+  box-shadow: var(--shadow-color);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.image {
+  width: 50%;
+  border-radius: 50%;
+  overflow: hidden;
+  /* height: 100px; */
+  aspect-ratio: 1/1;
+}
+
+body {
+  margin-left: 300px;
+  margin-top: 80px;
+}
+
+/* Media Query for Laptops and Desktops */
+@media (max-width: 1280px) {
+  body {
+    margin-left: 0;
+  }
+}
