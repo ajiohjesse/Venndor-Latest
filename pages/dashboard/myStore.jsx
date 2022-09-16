@@ -9,6 +9,7 @@ import {
   faLocationCrosshairs,
   faLocationDot,
   faShareNodes,
+  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FaEnvelope, FaPhone, FaLocationArrow } from "react-icons/fa";
 import Input from "../../components/ui/Input";
@@ -24,6 +25,7 @@ import Select from "../../components/ui/Select";
 const MyStore = () => {
   const [trackLoading, setTrackLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
+  const [deleteModal, setDeleteModalLoading] = useState(false);
 
   return (
     <div className={styles.profile}>
@@ -242,6 +244,48 @@ const MyStore = () => {
               />
               <Button color="text">Update details</Button>
             </form>
+          </div>
+
+          <div className={styles.editPassword}>
+            <h2 className={styles.heading}>Settings</h2>
+            <div className={styles.setting}>
+              {deleteModal ? (
+                <div className={styles.deleteModal}>
+                  <p>
+                    <span>
+                      <FontAwesomeIcon icon={faTriangleExclamation} />
+                    </span>
+                    Warning!!! You are about to delete your Store. This will
+                    remove all listed products. You cannot undo this action.
+                    Enter your Password to proceed.
+                  </p>
+
+                  <Input type="password" label="Password" />
+                  <Button color="danger">Delete</Button>
+                  <Button
+                    color="text"
+                    onClick={() => setDeleteModalLoading(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <h3>
+                    <span>
+                      <FontAwesomeIcon icon={faTriangleExclamation} />
+                    </span>
+                    Delete Store
+                  </h3>
+                  <Button
+                    color="danger"
+                    onClick={() => setDeleteModalLoading(true)}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

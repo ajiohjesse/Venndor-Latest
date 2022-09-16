@@ -8,6 +8,7 @@ import {
   faCamera,
   faCopy,
   faShareNodes,
+  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   FaFacebook,
@@ -23,13 +24,13 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Router from "next/router";
 import Spinner from "../../components/ui/Spinner";
-import Link from "next/link";
 
 const Profile = () => {
   const [store] = useState(true);
   const [trackLoading, setTrackLoading] = useState(false);
   const [storeLoading, setStoreLoading] = useState(false);
   const [createStoreLoading, setCreateStoreLoading] = useState(false);
+  const [deleteModal, setDeleteModalLoading] = useState(false);
 
   return (
     <div className={styles.profile}>
@@ -285,6 +286,47 @@ const Profile = () => {
               <Input label="Repeat New password" type="password" />
               <Button color="text">Update password</Button>
             </form>
+          </div>
+
+          <div className={styles.editPassword}>
+            <h2 className={styles.heading}>Settings</h2>
+            <div className={styles.setting}>
+              {deleteModal ? (
+                <div className={styles.deleteModal}>
+                  <p>
+                    <span>
+                      <FontAwesomeIcon icon={faTriangleExclamation} />
+                    </span>
+                    Warning!!! You are about to delete your Venndor Account. You
+                    cannot undo this action. Enter your Password to proceed.
+                  </p>
+
+                  <Input type="password" label="Password" />
+                  <Button color="danger">Delete</Button>
+                  <Button
+                    color="text"
+                    onClick={() => setDeleteModalLoading(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <h3>
+                    <span>
+                      <FontAwesomeIcon icon={faTriangleExclamation} />
+                    </span>
+                    Delete Account
+                  </h3>
+                  <Button
+                    color="danger"
+                    onClick={() => setDeleteModalLoading(true)}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

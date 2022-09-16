@@ -1,0 +1,41 @@
+.wrapper {
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.heading {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 4rem;
+}
+
+.filters {
+  margin-bottom: 4rem;
+}
+
+.filterCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-top: 3rem;
+}
+
+@media (max-width: 540px) {
+  .filterCol {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+}
+
+.resultHeading {
+  margin-bottom: 3rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+

@@ -1,0 +1,30 @@
+.skeleton {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 240px;
+  margin-bottom: 2rem;
+  gap: 2rem ;
+  background-color: var(--bg2);
+  padding: 2rem;
+  border: 1px solid var(--text-faded2);
+}
+
+.skeleton > span:last-child {
+  display: grid;
+  gap: 2rem;
+}
+
+.skeletonText {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+@media (max-width: 540px) {
+  .skeleton {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton > span:last-child {
+    gap: 5px;
+  }
+}

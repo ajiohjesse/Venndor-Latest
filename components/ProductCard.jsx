@@ -1,4 +1,4 @@
-import styles from "../styles/ListedProduct.module.css";
+import styles from "../styles/ProductCard.module.css";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import product from "../public/images/shoe.jpg";
@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Router from "next/router";
 import Spinner from "./ui/Spinner";
+import { stringLength } from "../lib/stringLength";
 
 const ProductCard = () => {
   const [productLoading, setProductLoading] = useState(false);
@@ -22,7 +23,9 @@ const ProductCard = () => {
         />
       </div>
       <div className={styles.orderDetails}>
-        <p className={styles.title}>Unisex Vintage shirts</p>
+        <p className={styles.title}>
+          Unisex Vintage shirts
+        </p>
         <div className={styles.storeName}>
           <span>Price: </span>
           <span className={styles.price}>
@@ -33,6 +36,11 @@ const ProductCard = () => {
         <div className={styles.storeName}>
           <span>Categroy: </span>
           <span className={styles.category}>Male Fashion</span>
+        </div>
+
+        <div className={styles.storeName}>
+          <span>Store: </span>
+          <span className={styles.category}>Rehx Stores</span>
         </div>
 
         <div className={styles.storeName}>
