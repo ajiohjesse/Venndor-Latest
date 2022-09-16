@@ -43,7 +43,11 @@ const SingleProduct = () => {
             </span>
 
             <span className={styles.textGroup}>
-              <span>Contact:</span> <span>07017890895</span>
+              <span>Contact:</span> <span className={styles.phone}>07017890895</span>
+            </span>
+
+            <span className={styles.textGroup}>
+              <span>Listed On:</span> <span className={styles.phone}>12/08/2022</span>
             </span>
           </div>
         </div>

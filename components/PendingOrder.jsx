@@ -1,6 +1,5 @@
 import styles from "../styles/ListedProduct.module.css";
 import {
-  faEdit,
   faEye,
   faTrash,
   faTriangleExclamation,
@@ -9,9 +8,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import product from "../public/images/shoe.jpg";
 import Image from "next/image";
 import { useState } from "react";
+import Spinner from "./ui/Spinner";
+import Router from "next/router";
 
 const PendingOrder = () => {
   const [deleteModal, setDeleteModal] = useState(false);
+  const [productLoading, setProductLoading] = useState(false);
 
   return (
     <div className={styles.row}>
@@ -36,9 +38,23 @@ const PendingOrder = () => {
         </div>
 
         <div className={styles.buttons}>
-          <button className={styles.view}>
-            <FontAwesomeIcon icon={faEye} />
-            <span className={styles.buttonTitle}>View</span>
+          <button
+            className={styles.view}
+            onClick={() => {
+              setProductLoading(true);
+              Router.push("/product/id");
+            }}
+          >
+            {productLoading ? (
+              <>
+                <Spinner size="sm" />
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faEye} />
+                <span className={styles.buttonTitle}>View</span>
+              </>
+            )}
           </button>
 
           <button

@@ -9,9 +9,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import product from "../public/images/shoe.jpg";
 import Image from "next/image";
 import { useState } from "react";
+import Spinner from "./ui/Spinner";
+import Router from "next/router";
 
 const ListedProduct = () => {
   const [deleteModal, setDeleteModal] = useState(false);
+  const [productLoading, setProductLoading] = useState(false);
+
 
   return (
     <div className={styles.row}>
@@ -39,9 +43,23 @@ const ListedProduct = () => {
         </div>
 
         <div className={styles.buttons}>
-          <button className={styles.view}>
-            <FontAwesomeIcon icon={faEye} />
-            <span className={styles.buttonTitle}>View</span>
+        <button
+            className={styles.view}
+            onClick={() => {
+              setProductLoading(true);
+              Router.push("/product/id");
+            }}
+          >
+            {productLoading ? (
+              <>
+                <Spinner size="sm" />
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faEye} />
+                <span className={styles.buttonTitle}>View</span>
+              </>
+            )}
           </button>
 
           <button

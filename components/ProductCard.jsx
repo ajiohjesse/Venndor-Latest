@@ -1,16 +1,15 @@
 import styles from "../styles/ListedProduct.module.css";
-import {
-  faEdit,
-  faEye,
-  faTrash,
-  faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import product from "../public/images/shoe.jpg";
 import Image from "next/image";
 import { useState } from "react";
+import Router from "next/router";
+import Spinner from "./ui/Spinner";
 
 const ProductCard = () => {
+  const [productLoading, setProductLoading] = useState(false);
+
   return (
     <div className={styles.row}>
       <div className={styles.image}>
@@ -26,7 +25,9 @@ const ProductCard = () => {
         <p className={styles.title}>Unisex Vintage shirts</p>
         <div className={styles.storeName}>
           <span>Price: </span>
-          <span className={styles.price}>&#8358; {(5000).toLocaleString("en-Us")}</span>
+          <span className={styles.price}>
+            &#8358; {(5000).toLocaleString("en-Us")}
+          </span>
         </div>
 
         <div className={styles.storeName}>
@@ -40,9 +41,23 @@ const ProductCard = () => {
         </div>
 
         <div className={styles.buttons}>
-          <button className={styles.view}>
-            <FontAwesomeIcon icon={faEye} />
-            <span className={styles.buttonTitle}>View</span>
+          <button
+            className={styles.view}
+            onClick={() => {
+              setProductLoading(true);
+              Router.push("/product/id");
+            }}
+          >
+            {productLoading ? (
+              <>
+                <Spinner size="sm" />
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faEye} />
+                <span className={styles.buttonTitle}>View</span>
+              </>
+            )}
           </button>
         </div>
       </div>

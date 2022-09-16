@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Featured from "../components/Featured";
+import RecentlyAdded from "../components/RecentlyAdded";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import LoadingImage from "../components/ui/LoadingImage";
@@ -17,6 +18,7 @@ export default function Home() {
       </Head>
 
       <Featured />
+      <RecentlyAdded />
     </>
   );
 }

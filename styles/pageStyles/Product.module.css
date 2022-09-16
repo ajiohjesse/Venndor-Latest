@@ -1,6 +1,6 @@
 .wrapper {
   width: 100%;
-  padding: 5rem 0;
+  padding: 3rem 0;
 }
 
 .container {
@@ -13,14 +13,13 @@
 
 .top {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1.5fr;
   gap: 4rem;
   height: 100%;
 }
 
 .image {
   position: relative;
-  height: 300px;
 }
 
 .image > span {
@@ -44,6 +43,12 @@
   color: var(--price);
   font-weight: 500;
   margin-bottom: 2rem;
+}
+
+.phone {
+  margin-left: 1rem;
+  font-size: 2rem;
+  font-weight: 500;
 }
 
 .textGroup {
@@ -76,4 +81,15 @@
   font-size: 1.8rem;
   font-weight: 500;
   margin-bottom: 2rem;
+}
+
+@media (max-width: 600px) {
+  .top {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .image {
+    height: 300px;
+  }
 }
