@@ -376,3 +376,7 @@
   margin-top: 2rem;
   margin-bottom: 3rem;
 }
+
+.primary {
+  color: var(--primary) !important;
+}

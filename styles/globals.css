@@ -159,18 +159,6 @@ button {
   padding: 5rem 0;
 }
 
-.card {
-  margin-top: 4rem;
-  width: 300px;
-  padding: 2rem;
-  background-color: var(--fff);
-  box-shadow: var(--shadow-color);
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
 .image {
   width: 50%;
   border-radius: 50%;

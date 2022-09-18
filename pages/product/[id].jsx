@@ -64,7 +64,7 @@ const SingleProduct = () => {
           <div className={styles.request}>
             <h3>Request for this product</h3>
             <Button color="text">
-              <FontAwesomeIcon icon={faShoppingCart} /> Send Order Request
+              <FontAwesomeIcon icon={faShoppingCart} /> Send Request
             </Button>
           </div>
         </div>

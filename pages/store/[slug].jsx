@@ -17,10 +17,15 @@ import toast from "react-hot-toast";
 import Router from "next/router";
 import Spinner from "../../components/ui/Spinner";
 import ProductCard from "../../components/ProductCard";
+import { GET_STORE } from "../../graphql/queries/storeQueries";
+import client from "../../apollo-client";
+import PageNotFound from "../../components/PageNotFound";
 
-const Store = () => {
+const Store = ({ store }) => {
   const [profileLoading, setProfileLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
+
+  if (!store) return <PageNotFound />;
 
   return (
     <div className={styles.profile}>
@@ -31,38 +36,36 @@ const Store = () => {
           <div className={styles.metadata}>
             <div className={styles.profilePicture}>
               <Image
-                src={storeAvatar}
+                src={store.avatar ? store.avatar.url : storeAvatar}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
-                alt="profile"
+                alt={store.name}
               />
               <LoadingImage />
             </div>
-            <h3 className={styles.fullname}>Rehx Stores</h3>
-            <p className={styles.tagline}>The best in general merchandise</p>
+            <h3 className={styles.fullname}>{store.name}</h3>
+            <p className={styles.tagline}>{store.tagline}</p>
           </div>
 
           <div className={styles.linkProfile}>
             <h3>Description</h3>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam enim
-              laudantium eaque minus, quis sint animi dolore. Eveniet, quaerat
-              dolorum.
-            </p>
+            <p>{store.description}</p>
           </div>
 
           <div className={styles.linkProfile}>
             <h3>Store Link</h3>
             <div className={styles.profileLink}>
-              <p>https://{process.env.DOMAIN}/store/16572688673787</p>
+              <p>
+                https://{process.env.DOMAIN}/store/{store.slug}
+              </p>
               <span>
                 <FontAwesomeIcon
                   icon={faCopy}
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.clipboard.writeText(
-                      `https://${process.env.DOMAIN}/user/rehxofficial`
+                      `https://${process.env.DOMAIN}/store/${store.slug}`
                     );
 
                     toast.success("Link Copied to clipboard");
@@ -73,9 +76,9 @@ const Store = () => {
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.share({
-                      title: "Rehxofficial",
-                      text: "Hi, checkout my Venndor profile.",
-                      url: `https://${process.env.DOMAIN}/user/rehxofficial`,
+                      title: store.name,
+                      text: "Hi, checkout my store on Venndor.",
+                      url: `https://${process.env.DOMAIN}/store/${store.slug}`,
                     });
                   }}
                 />
@@ -92,39 +95,37 @@ const Store = () => {
                     <FontAwesomeIcon icon={faLocationDot} />
                     Address:
                   </td>
-                  <td>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non
-                    nobis eos illo eaque impedit minus illum. Labore magnam
-                    asperiores vitae?
-                  </td>
+                  <td>{store.address}</td>
                 </tr>
                 <tr>
                   <td>
                     <FaLocationArrow />
                     State:
                   </td>
-                  <td>Benue</td>
+                  <td>{store.state}</td>
                 </tr>
-                <tr>
-                  <td>
-                    <FontAwesomeIcon icon={faLocationCrosshairs} />
-                    L.G.A:
-                  </td>
-                  <td>Makurdi</td>
-                </tr>
+                {store.district && (
+                  <tr>
+                    <td>
+                      <FontAwesomeIcon icon={faLocationCrosshairs} />
+                      L.G.A:
+                    </td>
+                    <td>{store.district}</td>
+                  </tr>
+                )}
                 <tr>
                   <td>
                     <FaEnvelope />
                     Email:
                   </td>
-                  <td>ajiohjesse@gmail.com</td>
+                  <td>{store.email}</td>
                 </tr>
                 <tr>
                   <td>
                     <FaPhone />
                     Phone:
                   </td>
-                  <td>07017890895</td>
+                  <td>{store.contact}</td>
                 </tr>
               </tbody>
             </table>
@@ -135,25 +136,29 @@ const Store = () => {
             <div className={styles.storeOwner}>
               <div className={styles.profilePicture}>
                 <Image
-                  src={userAvatar}
+                  src={
+                    store.account.avatar ? store.account.avatar.url : userAvatar
+                  }
                   layout="fill"
                   objectFit="cover"
                   objectPosition="center"
-                  alt="profile"
+                  alt={`${store.account.firstname} ${store.account.lastname}`}
                 />
                 <LoadingImage />
               </div>
               <div className={styles.ownerDetails}>
-                <h3>Jesse Ajioh</h3>
-                <h4>rehxofficial</h4>
-                <p>07017890895</p>
+                <h3>
+                  {store.account.firstname} {store.account.lastname}
+                </h3>
+                <h4>{store.account.username}</h4>
+                <p>{store.account.phone}</p>
               </div>
             </div>
             <Button
               color="text"
               disabled={profileLoading}
               onClick={() => {
-                Router.push("/user/storeOwner");
+                Router.push(`/user/${store.account.username}`);
                 setProfileLoading(true);
               }}
             >
@@ -169,28 +174,33 @@ const Store = () => {
 
           <div className={styles.orders}>
             <h2 className={styles.heading}>Listed Products</h2>
-            <div className={styles.storeListings}>
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-            </div>
-            <Button
-              color="text"
-              disabled={productsLoading}
-              onClick={() => {
-                Router.push("/store/products/id");
-                setProductsLoading(true);
-              }}
-            >
-              {productsLoading ? (
-                <>
-                  <Spinner size="sm" /> Loading
-                </>
-              ) : (
-                "View all Products"
-              )}
-            </Button>
+            {store.products[0] ? (
+              <>
+                <div className={styles.storeListings}>
+                  {store.products.map((product, i) => (
+                    <ProductCard id={product.id} key={i} />
+                  ))}
+                </div>
+                <Button
+                  color="text"
+                  disabled={productsLoading}
+                  onClick={() => {
+                    Router.push("/store/products/id");
+                    setProductsLoading(true);
+                  }}
+                >
+                  {productsLoading ? (
+                    <>
+                      <Spinner size="sm" /> Loading
+                    </>
+                  ) : (
+                    "View all Products"
+                  )}
+                </Button>
+              </>
+            ) : (
+              <p>No listed products.</p>
+            )}
           </div>
         </div>
       </div>
@@ -199,3 +209,18 @@ const Store = () => {
 };
 
 export default Store;
+
+export const getServerSideProps = async ({ params }) => {
+  const slug = params.slug;
+
+  const { data } = await client.query({
+    query: GET_STORE,
+    variables: { slug },
+  });
+
+  return {
+    props: {
+      store: data.store,
+    },
+  };
+};
