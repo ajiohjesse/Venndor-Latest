@@ -1,4 +1,4 @@
-import Nav from "./Nav";
+import Nav from './Nav'
 
 const Layout = ({ children }) => {
   return (
@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
       <Nav />
       {children}
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

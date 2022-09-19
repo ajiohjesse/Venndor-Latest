@@ -195,9 +195,14 @@
   align-items: center;
 }
 
+.storeText {
+  width: 100%;
+}
+
 .storeText > h3 {
   font-weight: 500;
   font-size: 2rem;
+  text-align: center;
 }
 
 .storeText > p {

@@ -1,44 +1,52 @@
-import styles from "../styles/Nav.module.css";
-import Image from "next/image";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import Router from "next/router";
-import logoIcon from "../public/images/venndor.svg";
-import userAvatar from "../public/images/userAvatar.jpg";
-import Input from "./ui/Input";
-import Button from "./ui/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from '../styles/Nav.module.css'
+import Image from 'next/image'
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import Router from 'next/router'
+import logoIcon from '../public/images/venndor.svg'
+import userAvatar from '../public/images/userAvatar.jpg'
+import Input from './ui/Input'
+import Button from './ui/Button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBars,
   faClose,
   faMagnifyingGlass,
   faSignIn,
   faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import NavMenu from "./NavMenu";
-import MenuCategories from "./MenuCategories";
-const ThemeToggler = dynamic(() => import("../components/ui/ThemeToggler"), {
+} from '@fortawesome/free-solid-svg-icons'
+import { useContext, useEffect, useState } from 'react'
+import NavMenu from './NavMenu'
+import MenuCategories from './MenuCategories'
+import { AuthContext } from '../context/AuthContext'
+const ThemeToggler = dynamic(() => import('../components/ui/ThemeToggler'), {
   ssr: false,
-});
+})
 
 const Nav = () => {
-  const [user, setUser] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const { user: username } = useContext(AuthContext)
+
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    setUser(username)
+  }, [username])
 
   return (
     <nav className={styles.nav}>
       <div className={styles.container}>
         <aside
           className={
-            menuOpen ? [styles.aside, styles.active].join(" ") : styles.aside
+            menuOpen ? [styles.aside, styles.active].join(' ') : styles.aside
           }
         >
           <div className={styles.asideContainer}>
             <div className={styles.logo}>
               <span
                 className={styles.logoIcon}
-                onClick={() => Router.push("/")}
+                onClick={() => Router.push('/')}
               >
                 <Image
                   src={logoIcon}
@@ -69,7 +77,7 @@ const Nav = () => {
 
         {/* displays only on smaller screens */}
         <div className={styles.logo} id={styles.logo2}>
-          <span className={styles.logoIcon} onClick={() => Router.push("/")}>
+          <span className={styles.logoIcon} onClick={() => Router.push('/')}>
             <Image
               src={logoIcon}
               alt="Venndor-Logo"
@@ -91,7 +99,7 @@ const Nav = () => {
         <ThemeToggler />
 
         <div className={styles.info}>
-          {user ? (
+          {user !== null ? (
             <div className={styles.user}>
               <span className={styles.userImg}>
                 <Image
@@ -127,14 +135,14 @@ const Nav = () => {
             </button>
             {user ? (
               <button
-                onClick={() => Router.push("/dashboard/profile")}
+                onClick={() => Router.push('/dashboard/profile')}
                 title="View Profile"
               >
                 <FontAwesomeIcon icon={faUser} className={styles.userIcon} />
               </button>
             ) : (
               <button
-                onClick={() => Router.push("/auth/login")}
+                onClick={() => Router.push('/auth/login')}
                 title="Sign In"
               >
                 <FontAwesomeIcon icon={faSignIn} className={styles.userIcon} />
@@ -144,7 +152,7 @@ const Nav = () => {
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Nav;
+export default Nav

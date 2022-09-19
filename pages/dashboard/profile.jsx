@@ -28,22 +28,28 @@ import { useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { useQuery } from '@apollo/client'
 import { GET_USER } from '../../graphql/queries/userQueries'
+import Cookies from 'js-cookie'
+import client from '../../apollo-client'
 
 const Profile = () => {
-  const [store, setStore] = useState(true)
   const [trackLoading, setTrackLoading] = useState(false)
   const [storeLoading, setStoreLoading] = useState(false)
   const [createStoreLoading, setCreateStoreLoading] = useState(false)
   const [deleteModal, setDeleteModalLoading] = useState(false)
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
 
-  const { user: username } = useContext(AuthContext)
+  const { user: username, dispatch } = useContext(AuthContext)
 
   const { data, loading } = useQuery(GET_USER, { variables: { username } })
 
-  useEffect(() => {
-    !loading ? setUser(data.account) : setUser(null)
-  }, [loading])
+  const user = data?.account
+
+  const handleLogout = () => {
+    Cookies.remove('VenndorUser')
+    dispatch({ type: 'LOGOUT' })
+    toast.success('Logged out')
+    Router.push('/auth/login')
+  }
 
   return loading ? (
     <div
@@ -65,7 +71,7 @@ const Profile = () => {
           <div className={styles.metadata}>
             <div className={styles.profilePicture}>
               <Image
-                src={user?.avatar.url || userAvatar}
+                src={user?.avatar ? user?.avatar.url : userAvatar}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
@@ -184,7 +190,9 @@ const Profile = () => {
               <div className={styles.storeDetails}>
                 <div className={styles.storeImg}>
                   <Image
-                    src={user?.store.avatar.url || storeAvatar}
+                    src={
+                      user?.store.avatar ? user?.store.avatar.url : storeAvatar
+                    }
                     layout="fill"
                     objectFit="cover"
                     objectPosition="center"
@@ -317,6 +325,9 @@ const Profile = () => {
 
           <div className={styles.editPassword}>
             <h2 className={styles.heading}>Settings</h2>
+            <Button style={{ marginBottom: '3rem' }} onClick={handleLogout}>
+              Logout
+            </Button>
             <div className={styles.setting}>
               {deleteModal ? (
                 <div className={styles.deleteModal}>
