@@ -1,43 +1,42 @@
-import styles from "../../styles/pageStyles/Auth.module.css";
-import Input from "../../components/ui/Input";
-import Button from "../../components/ui/Button";
-import Link from "next/link";
-import { useState } from "react";
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import Router from "next/router";
-import toast from "react-hot-toast";
-import Spinner from "../../components/ui/Spinner";
-import axios from "axios";
-import Cookies from "js-cookie";
+import styles from '../../styles/pageStyles/Auth.module.css'
+import Input from '../../components/ui/Input'
+import Button from '../../components/ui/Button'
+import Link from 'next/link'
+import { useState } from 'react'
+import { useContext } from 'react'
+import { AuthContext } from '../../context/AuthContext'
+import Router from 'next/router'
+import toast from 'react-hot-toast'
+import Spinner from '../../components/ui/Spinner'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-  const { loading, error, dispatch } = useContext(AuthContext);
+  const { loading, error, dispatch } = useContext(AuthContext)
 
-  const handleLogin = async e => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault()
 
-    dispatch({ type: "LOGIN_START" });
+    dispatch({ type: 'LOGIN_START' })
 
-    try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
-        username,
-        password,
-      });
+    await axios
+      .post('/api/login', { username, password })
+      .then((res) => {
+        dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.username })
 
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.username });
+        Cookies.set('VenndorUser', res.data.token, { expires: 30 })
 
-      Cookies.set("VenndorUser", res.data.token, { expires: 30 });
+        toast.success('Logged in')
 
-      toast.success("Logged in");
-      Router.push("/dashboard/profile");
-    } catch (err) {
-      dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
-    }
-  };
+        Router.push('/dashboard/profile')
+      })
+      .catch((err) =>
+        dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data }),
+      )
+  }
 
   return (
     <div className="section">
@@ -48,12 +47,12 @@ const Login = () => {
           <Input
             type="text"
             label="Username"
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <Input
             type="password"
             label="Password"
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button onClick={handleLogin} disabled={loading}>
             {loading ? (
@@ -61,7 +60,7 @@ const Login = () => {
                 <Spinner size="sm" /> Loading
               </>
             ) : (
-              "Sign in"
+              'Sign in'
             )}
           </Button>
         </form>
@@ -69,12 +68,12 @@ const Login = () => {
           Don't have an account? <Link href="/auth/register">Register</Link>
         </p>
         <p className={styles.link}>
-          Forgot your password?{" "}
+          Forgot your password?{' '}
           <Link href="/auth/recover">Recover Password</Link>
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
