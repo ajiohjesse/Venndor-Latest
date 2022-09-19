@@ -24,6 +24,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Router from "next/router";
 import Spinner from "../../components/ui/Spinner";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const Profile = () => {
   const [store] = useState(true);
@@ -31,6 +33,10 @@ const Profile = () => {
   const [storeLoading, setStoreLoading] = useState(false);
   const [createStoreLoading, setCreateStoreLoading] = useState(false);
   const [deleteModal, setDeleteModalLoading] = useState(false);
+
+  const { user } = useContext(AuthContext);
+
+  console.log(user);
 
   return (
     <div className={styles.profile}>
@@ -46,6 +52,7 @@ const Profile = () => {
                 objectFit="cover"
                 objectPosition="center"
                 alt="profile"
+                priority
               />
               <LoadingImage />
             </div>

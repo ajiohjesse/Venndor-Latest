@@ -23,7 +23,7 @@ const ThemeToggler = dynamic(() => import("../components/ui/ThemeToggler"), {
 });
 
 const Nav = () => {
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (

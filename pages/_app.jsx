@@ -5,6 +5,7 @@ import Head from "next/head";
 import Layout from "../components/Layout";
 import { ApolloProvider } from "@apollo/client";
 import client from "../apollo-client";
+import { AuthContextProvider } from "../context/AuthContext";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -12,13 +13,15 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Venndor - The Online Marketplace</title>
       </Head>
-      <ApolloProvider client={client}>
-        <Layout>
-          <Toaster />
+      <AuthContextProvider>
+        <ApolloProvider client={client}>
+          <Layout>
+            <Toaster />
 
-          <Component {...pageProps} />
-        </Layout>
-      </ApolloProvider>
+            <Component {...pageProps} />
+          </Layout>
+        </ApolloProvider>
+      </AuthContextProvider>
     </>
   );
 }

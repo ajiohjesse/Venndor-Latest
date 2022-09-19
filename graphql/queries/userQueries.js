@@ -29,3 +29,11 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_USER_PASS = gql`
+  query getUserPass($username: String!) {
+    account(where: { username: $username }) {
+      password
+    }
+  }
+`;
