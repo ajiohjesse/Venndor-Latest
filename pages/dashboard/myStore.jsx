@@ -1,8 +1,8 @@
-import styles from "../../styles/pageStyles/Profile.module.css";
-import Image from "next/image";
-import storeAvatar from "../../public/images/storeAvatar.jpg";
-import LoadingImage from "../../components/ui/LoadingImage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from '../../styles/pageStyles/Profile.module.css'
+import Image from 'next/image'
+import storeAvatar from '../../public/images/storeAvatar.jpg'
+import LoadingImage from '../../components/ui/LoadingImage'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCamera,
   faCopy,
@@ -10,24 +10,50 @@ import {
   faLocationDot,
   faShareNodes,
   faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
-import { FaEnvelope, FaPhone, FaLocationArrow } from "react-icons/fa";
-import Input from "../../components/ui/Input";
-import Button from "../../components/ui/Button";
-import Textarea from "../../components/ui/Textarea";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import Router from "next/router";
-import Spinner from "../../components/ui/Spinner";
-import { states } from "../../lib/selections";
-import Select from "../../components/ui/Select";
+} from '@fortawesome/free-solid-svg-icons'
+import { FaEnvelope, FaPhone, FaLocationArrow } from 'react-icons/fa'
+import Input from '../../components/ui/Input'
+import Button from '../../components/ui/Button'
+import Textarea from '../../components/ui/Textarea'
+import { useContext, useState } from 'react'
+import toast from 'react-hot-toast'
+import Router from 'next/router'
+import Spinner from '../../components/ui/Spinner'
+import { states } from '../../lib/selections'
+import Select from '../../components/ui/Select'
+import { AuthContext } from '../../context/AuthContext'
+import { GET_STORE } from '../../graphql/queries/storeQueries'
+import { useQuery } from '@apollo/client'
+import { GET_USER } from '../../graphql/queries/userQueries'
 
 const MyStore = () => {
-  const [trackLoading, setTrackLoading] = useState(false);
-  const [productsLoading, setProductsLoading] = useState(false);
-  const [deleteModal, setDeleteModalLoading] = useState(false);
+  const [trackLoading, setTrackLoading] = useState(false)
+  const [productsLoading, setProductsLoading] = useState(false)
+  const [deleteModal, setDeleteModalLoading] = useState(false)
+  const { user: username } = useContext(AuthContext)
 
-  return (
+  const { data: user } = useQuery(GET_USER, {
+    variables: { username },
+  })
+
+  const slug = user?.account.store.slug
+
+  const { data, loading } = useQuery(GET_STORE, { variables: { slug } })
+
+  const store = data?.store
+
+  return loading ? (
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        paddingBlock: '100px',
+      }}
+    >
+      <Spinner />
+    </div>
+  ) : (
     <div className={styles.profile}>
       <div className={styles.container}>
         <div className={styles.detailsCol}>
@@ -36,41 +62,39 @@ const MyStore = () => {
           <div className={styles.metadata}>
             <div className={styles.profilePicture}>
               <Image
-                src={storeAvatar}
+                src={store.avatar ? store.avatar.url : storeAvatar}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
-                alt="profile"
+                alt={store.name}
               />
               <LoadingImage />
             </div>
-            <h3 className={styles.fullname}>Rehx Stores</h3>
-            <p className={styles.tagline}>The best in general merchandise</p>
+            <h3 className={styles.fullname}>{store.name}</h3>
+            <p className={styles.tagline}>{store.tagline}</p>
           </div>
 
           <div className={styles.linkProfile}>
             <h3>Description</h3>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam enim
-              laudantium eaque minus, quis sint animi dolore. Eveniet, quaerat
-              dolorum.
-            </p>
+            <p>{store.description}</p>
           </div>
 
           <div className={styles.linkProfile}>
             <h3>Store Link</h3>
             <div className={styles.profileLink}>
-              <p>https://{process.env.DOMAIN}/store/16572688673787</p>
+              <p>
+                https://{process.env.DOMAIN}/store/{store.slug}
+              </p>
               <span>
                 <FontAwesomeIcon
                   icon={faCopy}
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.clipboard.writeText(
-                      `https://${process.env.DOMAIN}/user/rehxofficial`
-                    );
+                      `https://${process.env.DOMAIN}/store/${store.slug}`,
+                    )
 
-                    toast.success("Link Copied to clipboard");
+                    toast.success('Link Copied to clipboard')
                   }}
                 />
                 <FontAwesomeIcon
@@ -78,10 +102,10 @@ const MyStore = () => {
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.share({
-                      title: "Rehxofficial",
-                      text: "Hi, checkout my Venndor profile.",
-                      url: `https://${process.env.DOMAIN}/user/rehxofficial`,
-                    });
+                      title: `${store.name}`,
+                      text: `Hi, checkout my Store on Venndor. ${store.description}`,
+                      url: `https://${process.env.DOMAIN}/store/${store.slug}`,
+                    })
                   }}
                 />
               </span>
@@ -97,39 +121,37 @@ const MyStore = () => {
                     <FontAwesomeIcon icon={faLocationDot} />
                     Address:
                   </td>
-                  <td>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non
-                    nobis eos illo eaque impedit minus illum. Labore magnam
-                    asperiores vitae?
-                  </td>
+                  <td>{store.address}</td>
                 </tr>
                 <tr>
                   <td>
                     <FaLocationArrow />
                     State:
                   </td>
-                  <td>Benue</td>
+                  <td>{store.state}</td>
                 </tr>
-                <tr>
-                  <td>
-                    <FontAwesomeIcon icon={faLocationCrosshairs} />
-                    L.G.A:
-                  </td>
-                  <td>Makurdi</td>
-                </tr>
+                {store.district && (
+                  <tr>
+                    <td>
+                      <FontAwesomeIcon icon={faLocationCrosshairs} />
+                      L.G.A:
+                    </td>
+                    <td>{store.district}</td>
+                  </tr>
+                )}
                 <tr>
                   <td>
                     <FaEnvelope />
                     Email:
                   </td>
-                  <td>ajiohjesse@gmail.com</td>
+                  <td>{store.email}</td>
                 </tr>
                 <tr>
                   <td>
                     <FaPhone />
                     Phone:
                   </td>
-                  <td>07017890895</td>
+                  <td>{store.contact}</td>
                 </tr>
               </tbody>
             </table>
@@ -142,8 +164,8 @@ const MyStore = () => {
               color="text"
               disabled={productsLoading}
               onClick={() => {
-                Router.push("/dashboard/products");
-                setProductsLoading(true);
+                Router.push('/dashboard/products')
+                setProductsLoading(true)
               }}
             >
               {productsLoading ? (
@@ -151,7 +173,7 @@ const MyStore = () => {
                   <Spinner size="sm" /> Loading
                 </>
               ) : (
-                "My Products"
+                'My Products'
               )}
             </Button>
           </div>
@@ -163,8 +185,8 @@ const MyStore = () => {
               color="text"
               disabled={trackLoading}
               onClick={() => {
-                Router.push("/dashboard/storeOrders");
-                setTrackLoading(true);
+                Router.push('/dashboard/storeOrders')
+                setTrackLoading(true)
               }}
             >
               {trackLoading ? (
@@ -172,7 +194,7 @@ const MyStore = () => {
                   <Spinner size="sm" /> Loading
                 </>
               ) : (
-                "Track"
+                'Track'
               )}
             </Button>
           </div>
@@ -194,26 +216,30 @@ const MyStore = () => {
                 type="text"
                 label="Store name"
                 placeholder="Store name"
+                defaultValue={store.name}
                 required
               />
               <Input
                 type="text"
                 label="Tagline"
                 placeholder="Short slogan"
+                defaultValue={store.tagline}
                 msg="Optional"
               />
               <Textarea
                 label="Description"
                 placeholder="Describe your business. . ."
+                defaultValue={store.description}
                 required
               />
               <Input
                 type="text"
                 label="Address"
                 placeholder="Business Address"
+                defaultValue={store.address}
                 required
               />
-              <Select label="State" required defaultValue="Abuja">
+              <Select label="State" required defaultValue={store.state}>
                 <option value="Abuja">Abuja</option>
                 {states.map((state, i) => (
                   <option value={state} key={i}>
@@ -226,6 +252,7 @@ const MyStore = () => {
                 type="text"
                 label="L.G.A"
                 placeholder="Local Area"
+                defaultValue={store.district}
                 msg="Optional"
               />
 
@@ -233,6 +260,7 @@ const MyStore = () => {
                 type="text"
                 label="Contact"
                 placeholder="070 0000 0000"
+                defaultValue={store.contact}
                 required
               />
 
@@ -240,6 +268,7 @@ const MyStore = () => {
                 type="email"
                 label="Email"
                 placeholder="Your business email"
+                defaultValue={store.email}
                 msg="Optional"
               />
               <Button color="text">Update details</Button>
@@ -290,7 +319,7 @@ const MyStore = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MyStore;
+export default MyStore

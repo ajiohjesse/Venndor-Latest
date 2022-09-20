@@ -1,8 +1,9 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const GET_USER = gql`
   query getUser($username: String!) {
     account(where: { username: $username }) {
+      id
       firstname
       lastname
       username
@@ -28,7 +29,7 @@ export const GET_USER = gql`
       }
     }
   }
-`;
+`
 
 export const GET_USER_PASS = gql`
   query getUserPass($username: String!) {
@@ -36,4 +37,14 @@ export const GET_USER_PASS = gql`
       password
     }
   }
-`;
+`
+
+export const GET_USER_IMG = gql`
+  query getuserImage($username: String!) {
+    account(where: { username: $username }) {
+      avatar {
+        url
+      }
+    }
+  }
+`

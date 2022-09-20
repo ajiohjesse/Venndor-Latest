@@ -19,6 +19,9 @@ import { useContext, useEffect, useState } from 'react'
 import NavMenu from './NavMenu'
 import MenuCategories from './MenuCategories'
 import { AuthContext } from '../context/AuthContext'
+import { useQuery } from '@apollo/client'
+import { GET_USER_IMG } from '../graphql/queries/userQueries'
+import LoadingImage from './ui/LoadingImage'
 const ThemeToggler = dynamic(() => import('../components/ui/ThemeToggler'), {
   ssr: false,
 })
@@ -33,6 +36,10 @@ const Nav = () => {
   useEffect(() => {
     setUser(username)
   }, [username])
+
+  const { loading, data } = useQuery(GET_USER_IMG, {
+    variables: { username },
+  })
 
   return (
     <nav className={styles.nav}>
@@ -102,16 +109,23 @@ const Nav = () => {
           {user !== null ? (
             <div className={styles.user}>
               <span className={styles.userImg}>
-                <Image
-                  src={userAvatar}
-                  layout="fill"
-                  objectFit="cover"
-                  objectPosition="center"
-                  alt="profile"
-                />
+                {loading ? null : (
+                  <Image
+                    src={
+                      data?.account.avatar
+                        ? data.account.avatar.url
+                        : userAvatar
+                    }
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="center"
+                    alt="profile"
+                  />
+                )}
+                <LoadingImage />
               </span>
               <div className={styles.userDetails}>
-                <h2>rehxofficial</h2>
+                <h2>{username}</h2>
                 <Link href="/dashboard/profile">View profile</Link>
               </div>
             </div>

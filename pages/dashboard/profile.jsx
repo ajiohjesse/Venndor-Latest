@@ -36,7 +36,6 @@ const Profile = () => {
   const [storeLoading, setStoreLoading] = useState(false)
   const [createStoreLoading, setCreateStoreLoading] = useState(false)
   const [deleteModal, setDeleteModalLoading] = useState(false)
-  // const [user, setUser] = useState(null)
 
   const { user: username, dispatch } = useContext(AuthContext)
 
@@ -186,7 +185,7 @@ const Profile = () => {
 
           <div className={styles.myStore}>
             <h2 className={styles.heading}>My Store</h2>
-            {user?.store.name ? (
+            {user?.store?.name ? (
               <div className={styles.storeDetails}>
                 <div className={styles.storeImg}>
                   <Image
@@ -275,37 +274,33 @@ const Profile = () => {
 
           <div className={styles.editDetails}>
             <form>
-              <Input label="First name" defaultValue="Jesse" />
-              <Input label="Last name" defaultValue="Ajioh" />
+              <Input label="First name" defaultValue={user?.firstname} />
+              <Input label="Last name" defaultValue={user?.lastname} />
               <Input
                 label="Username"
                 readOnly
-                defaultValue="rehxofficial"
+                defaultValue={user?.username}
                 msg="Cannot edit username."
               />
-              <Textarea label="Bio" defaultValue="description of yourself" />
-              <Input
-                label="Email"
-                type="email"
-                defaultValue="ajiohjesse@gmail.com"
-              />
-              <Input label="Phone" defaultValue="07017890895" />
+              <Textarea label="Bio" defaultValue={user?.bio} />
+              <Input label="Email" type="email" defaultValue={user?.email} />
+              <Input label="Phone" defaultValue={user?.phone} />
               <Input
                 type="url"
                 label="Facebook"
-                defaultValue="http://sample.com/username"
+                defaultValue={user?.facebook}
                 msg="Link to Facebook profile"
               />
               <Input
                 type="url"
                 label="Instagram"
-                defaultValue="http://sample.com/username"
+                defaultValue={user?.instagram}
                 msg="Link to Instagram profile"
               />
               <Input
                 type="url"
                 label="Twitter"
-                defaultValue="http://sample.com/username"
+                defaultValue={user?.twitter}
                 msg="Link to Twitter profile"
               />
               <Button color="text">Update details</Button>
@@ -325,7 +320,11 @@ const Profile = () => {
 
           <div className={styles.editPassword}>
             <h2 className={styles.heading}>Settings</h2>
-            <Button style={{ marginBottom: '3rem' }} onClick={handleLogout}>
+            <Button
+              color="text"
+              style={{ marginBottom: '3rem' }}
+              onClick={handleLogout}
+            >
               Logout
             </Button>
             <div className={styles.setting}>
