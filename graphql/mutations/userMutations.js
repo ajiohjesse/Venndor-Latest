@@ -7,7 +7,7 @@ export const CREATE_ACCOUNT = gql`
     $username: String!
     $password: String!
     $phone: String!
-    $email: String
+    $email: String!
   ) {
     createAccount(
       data: {

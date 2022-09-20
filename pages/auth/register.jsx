@@ -3,17 +3,14 @@ import Input from '../../components/ui/Input'
 import Button from '../../components/ui/Button'
 import Link from 'next/link'
 import { useState } from 'react'
-import { useMutation } from '@apollo/client'
-import {
-  CREATE_ACCOUNT,
-  PUBLISH_ACCOUNT,
-} from '../../graphql/mutations/userMutations'
 import Spinner from '../../components/ui/Spinner'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import Router from 'next/router'
 
 const Register = () => {
   const [registerError, setRegisterError] = useState('')
+  const [loading, setLoading] = useState(false)
   const [credentials, setCredentails] = useState({
     firstname: '',
     lastname: '',
@@ -27,36 +24,24 @@ const Register = () => {
     setCredentails({ ...credentials, [e.target.id]: e.target.value })
   }
 
-  const [createAccount, { loading, error }] = useMutation(CREATE_ACCOUNT)
-  const [publishAccount] = useMutation(PUBLISH_ACCOUNT)
-
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
 
     toast.loading('Creating Account. . .')
 
-    await fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...credentials,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.networkError) {
-          const msg = data.networkError.result.errors[0].message
-          setRegisterError(msg)
+    const { data } = await axios.post('/api/register', credentials)
 
-          toast.dismiss()
-        } else {
-          toast.dismiss()
-          toast.success('Account Created!')
-          // Router.push(`/accounts/${data}`)
-        }
-      })
+    if (data.success) {
+      toast.dismiss()
+      toast.success('Account Created!')
+      Router.push('/dashboard/profile')
+    } else {
+      toast.dismiss()
+      toast.error('Failed!')
+      setLoading(false)
+      setRegisterError(data.message)
+    }
   }
 
   return (

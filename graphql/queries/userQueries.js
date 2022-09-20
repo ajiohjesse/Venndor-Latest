@@ -48,3 +48,12 @@ export const GET_USER_IMG = gql`
     }
   }
 `
+
+export const GET_ALL_USERS = gql`
+  query getAllUsers {
+    accounts {
+      username
+      email
+    }
+  }
+`
