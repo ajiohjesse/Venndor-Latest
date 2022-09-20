@@ -26,10 +26,14 @@ import Router from 'next/router'
 import Spinner from '../../components/ui/Spinner'
 import { useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { GET_USER } from '../../graphql/queries/userQueries'
 import Cookies from 'js-cookie'
 import client from '../../apollo-client'
+import {
+  PUBLISH_ACCOUNT,
+  UPDATE_ACCOUNT,
+} from '../../graphql/mutations/userMutations'
 
 const Profile = () => {
   const [trackLoading, setTrackLoading] = useState(false)
@@ -39,15 +43,54 @@ const Profile = () => {
 
   const { user: username, dispatch } = useContext(AuthContext)
 
-  const { data, loading } = useQuery(GET_USER, { variables: { username } })
+  const { data, loading } = useQuery(GET_USER, {
+    variables: { username },
+  })
 
   const user = data?.account
 
+  const [credentials, setCredentials] = useState({})
+
   const handleLogout = () => {
+    Router.push('/auth/login')
     Cookies.remove('VenndorUser')
     dispatch({ type: 'LOGOUT' })
     toast.success('Logged out')
-    Router.push('/auth/login')
+  }
+
+  const [updateDetails, { loading: updateLoading }] = useMutation(
+    UPDATE_ACCOUNT,
+    {
+      refetchQueries: [{ query: GET_USER }],
+    },
+  )
+
+  const [publishAccount] = useMutation(PUBLISH_ACCOUNT, {
+    refetchQueries: [{ query: GET_USER }],
+  })
+
+  //handle change on details input fields
+  const handleChangeDetails = (e) => {
+    setCredentials({ ...credentials, [e.target.id]: e.target.value })
+  }
+
+  const handleSubmitDetails = async (e) => {
+    e.preventDefault()
+
+    await updateDetails({
+      variables: {
+        ...credentials,
+        username,
+      },
+    })
+      .then((res) => {
+        publishAccount({
+          variables: { username: res.data.updateAccount.username },
+        })
+
+        toast.success('Updated')
+      })
+      .catch((err) => console.log(err))
   }
 
   return loading ? (
@@ -273,37 +316,33 @@ const Profile = () => {
           </div>
 
           <div className={styles.editDetails}>
-            <form>
-              <Input label="First name" defaultValue={user?.firstname} />
-              <Input label="Last name" defaultValue={user?.lastname} />
-              <Input
-                label="Username"
-                readOnly
-                defaultValue={user?.username}
-                msg="Cannot edit username."
-              />
-              <Textarea label="Bio" defaultValue={user?.bio} />
-              <Input label="Email" type="email" defaultValue={user?.email} />
-              <Input label="Phone" defaultValue={user?.phone} />
+            <form onChange={handleChangeDetails} onSubmit={handleSubmitDetails}>
+              <Textarea label="Bio" defaultValue={user?.bio} id="bio" />
+              <Input label="Phone" defaultValue={user?.phone} id="phone" />
               <Input
                 type="url"
                 label="Facebook"
                 defaultValue={user?.facebook}
                 msg="Link to Facebook profile"
+                id="facebook"
               />
               <Input
                 type="url"
                 label="Instagram"
                 defaultValue={user?.instagram}
                 msg="Link to Instagram profile"
+                id="instagram"
               />
               <Input
                 type="url"
                 label="Twitter"
                 defaultValue={user?.twitter}
                 msg="Link to Twitter profile"
+                id="twitter"
               />
-              <Button color="text">Update details</Button>
+              <Button color="text" disabled={updateLoading}>
+                Update details
+              </Button>
             </form>
           </div>
 

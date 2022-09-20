@@ -26,7 +26,31 @@ export const CREATE_ACCOUNT = gql`
 
 export const PUBLISH_ACCOUNT = gql`
   mutation publishAccount($username: String!) {
-    publishAccount(where: { username: $username } to: PUBLISHED) {
+    publishAccount(where: { username: $username }, to: PUBLISHED) {
+      username
+    }
+  }
+`
+
+export const UPDATE_ACCOUNT = gql`
+  mutation updateAccount(
+    $username: String!
+    $bio: String
+    $phone: String
+    $facebook: String
+    $instagram: String
+    $twitter: String
+  ) {
+    updateAccount(
+      data: {
+        bio: $bio
+        phone: $phone
+        facebook: $facebook
+        instagram: $instagram
+        twitter: $twitter
+      }
+      where: { username: $username }
+    ) {
       username
     }
   }
