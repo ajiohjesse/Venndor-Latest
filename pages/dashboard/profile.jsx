@@ -29,7 +29,6 @@ import { AuthContext } from '../../context/AuthContext'
 import { useMutation, useQuery } from '@apollo/client'
 import { GET_USER } from '../../graphql/queries/userQueries'
 import Cookies from 'js-cookie'
-import client from '../../apollo-client'
 import {
   PUBLISH_ACCOUNT,
   UPDATE_ACCOUNT,
@@ -40,33 +39,34 @@ const Profile = () => {
   const [storeLoading, setStoreLoading] = useState(false)
   const [createStoreLoading, setCreateStoreLoading] = useState(false)
   const [deleteModal, setDeleteModalLoading] = useState(false)
+  const [loggingOut, setLoggingOut] = useState(false)
 
   const { user: username, dispatch } = useContext(AuthContext)
 
+  //get the user account information
   const { data, loading } = useQuery(GET_USER, {
     variables: { username },
   })
 
   const user = data?.account
 
+  //edit account details credentials
   const [credentials, setCredentials] = useState({})
 
   const handleLogout = () => {
-    Router.push('/auth/login')
+    setLoggingOut(true)
     Cookies.remove('VenndorUser')
     dispatch({ type: 'LOGOUT' })
     toast.success('Logged out')
+    Router.push('/auth/login')
   }
 
   const [updateDetails, { loading: updateLoading }] = useMutation(
     UPDATE_ACCOUNT,
-    {
-      refetchQueries: [{ query: GET_USER }],
-    },
   )
 
   const [publishAccount] = useMutation(PUBLISH_ACCOUNT, {
-    refetchQueries: [{ query: GET_USER }],
+    refetchQueries: [{ query: GET_USER, variables: { username } }],
   })
 
   //handle change on details input fields
@@ -93,7 +93,7 @@ const Profile = () => {
       .catch((err) => console.log(err))
   }
 
-  return loading ? (
+  return loading || loggingOut ? (
     <div
       style={{
         width: '100%',
