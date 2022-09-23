@@ -1,12 +1,11 @@
 import { gql } from '@apollo/client'
 
 export const GET_STORE = gql`
-  query getStore($slug: String!) {
-    store(where: { slug: $slug }) {
+  query getStore($id: ID!) {
+    store(where: { id: $id }) {
       id
       name
       tagline
-      slug
       description
       state
       district
@@ -34,6 +33,13 @@ export const GET_STORE = gql`
           url
         }
       }
+    }
+  }
+`
+export const GET_ALL_STORES = gql`
+  query getAllStores {
+    stores {
+      name
     }
   }
 `

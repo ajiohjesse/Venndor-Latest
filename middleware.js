@@ -49,14 +49,28 @@ export default async function middleware(req) {
       },
     })
 
-    /**
-     * Dont access create nstore page if user
-     * already has a store.
-     */
     if (!data?.account.store) {
       return NextResponse.rewrite(
         new URL('/dashboard/createStore', req.nextUrl),
       )
+    }
+  }
+
+  /**
+   * Dont access create store page if user
+   * already has a store.
+   */
+
+  if (url.includes('/dashboard/createStore')) {
+    const { data } = await client.query({
+      query: GET_USER,
+      variables: {
+        username,
+      },
+    })
+
+    if (data?.account.store) {
+      return NextResponse.rewrite(new URL('/dashboard/myStore', req.nextUrl))
     }
   }
 }

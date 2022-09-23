@@ -1,34 +1,34 @@
-import styles from "../../styles/pageStyles/Profile.module.css";
-import Image from "next/image";
-import storeAvatar from "../../public/images/storeAvatar.jpg";
-import userAvatar from "../../public/images/userAvatar.jpg";
-import LoadingImage from "../../components/ui/LoadingImage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import styles from '../../styles/pageStyles/Profile.module.css'
+import Image from 'next/image'
+import storeAvatar from '../../public/images/storeAvatar.jpg'
+import userAvatar from '../../public/images/userAvatar.jpg'
+import LoadingImage from '../../components/ui/LoadingImage'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy, faShareNodes } from '@fortawesome/free-solid-svg-icons'
 import {
   FaEnvelope,
   FaPhone,
   FaFacebook,
   FaInstagram,
   FaTwitter,
-} from "react-icons/fa";
-import Button from "../../components/ui/Button";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import Router from "next/router";
-import Spinner from "../../components/ui/Spinner";
-import client from "../../apollo-client";
-import { GET_USER } from "../../graphql/queries/userQueries";
-import PageNotFound from "../../components/PageNotFound";
+} from 'react-icons/fa'
+import Button from '../../components/ui/Button'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import Router from 'next/router'
+import Spinner from '../../components/ui/Spinner'
+import client from '../../apollo-client'
+import { GET_USER } from '../../graphql/queries/userQueries'
+import PageNotFound from '../../components/PageNotFound'
 
 const User = ({ user }) => {
-  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false)
 
-  if (!user) return <PageNotFound />;
+  if (!user) return <PageNotFound />
 
   return (
     <div className={styles.profile}>
-      <div className={[styles.container, styles.store].join(" ")}>
+      <div className={[styles.container, styles.store].join(' ')}>
         <div className={styles.detailsCol}>
           <h2 className={styles.heading}>Profile</h2>
 
@@ -65,10 +65,10 @@ const User = ({ user }) => {
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.clipboard.writeText(
-                      `https://${process.env.DOMAIN}/user/${user.username}}`
-                    );
+                      `https://${process.env.DOMAIN}/user/${user.username}}`,
+                    )
 
-                    toast.success("Link Copied to clipboard");
+                    toast.success('Link Copied to clipboard')
                   }}
                 />
                 <FontAwesomeIcon
@@ -77,9 +77,9 @@ const User = ({ user }) => {
                   onClick={() => {
                     navigator.share({
                       title: `${user.firstname} ${user.lastname}`,
-                      text: "Hi, checkout my Venndor profile.",
+                      text: 'Hi, checkout my Venndor profile.',
                       url: `https://${process.env.DOMAIN}/user/${user.username}`,
-                    });
+                    })
                   }}
                 />
               </span>
@@ -167,7 +167,7 @@ const User = ({ user }) => {
                   <h3>{user.store.name}</h3>
                   <p className={styles.primary}>{user.store.tagline}</p>
                   <p>
-                    <span>Location:</span> {user.store.state}{" "}
+                    <span>Location:</span> {user.store.state}{' '}
                     {user.store.district && (
                       <span>/ {user.store.district}</span>
                     )}
@@ -178,8 +178,8 @@ const User = ({ user }) => {
                 color="text"
                 disabled={profileLoading}
                 onClick={() => {
-                  Router.push(`/store/${user.store.slug}`);
-                  setProfileLoading(true);
+                  Router.push(`/store/${user.store.id}`)
+                  setProfileLoading(true)
                 }}
               >
                 {profileLoading ? (
@@ -187,7 +187,7 @@ const User = ({ user }) => {
                     <Spinner size="sm" /> Loading
                   </>
                 ) : (
-                  "View Store"
+                  'View Store'
                 )}
               </Button>
             </div>
@@ -195,22 +195,22 @@ const User = ({ user }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default User;
+export default User
 
 export const getServerSideProps = async ({ params }) => {
-  const username = params.username;
+  const username = params.username
 
   const { data } = await client.query({
     query: GET_USER,
     variables: { username },
-  });
+  })
 
   return {
     props: {
       user: data.account,
     },
-  };
-};
+  }
+}

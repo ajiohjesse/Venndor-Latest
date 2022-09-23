@@ -36,9 +36,9 @@ const MyStore = () => {
     variables: { username },
   })
 
-  const slug = user?.account.store.slug
+  const id = user?.account.store.id
 
-  const { data, loading } = useQuery(GET_STORE, { variables: { slug } })
+  const { data, loading } = useQuery(GET_STORE, { variables: { id } })
 
   const store = data?.store
 
@@ -62,7 +62,7 @@ const MyStore = () => {
           <div className={styles.metadata}>
             <div className={styles.profilePicture}>
               <Image
-                src={store.avatar ? store.avatar.url : storeAvatar}
+                src={store?.avatar ? store.avatar.url : storeAvatar}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
@@ -70,8 +70,8 @@ const MyStore = () => {
               />
               <LoadingImage />
             </div>
-            <h3 className={styles.fullname}>{store.name}</h3>
-            <p className={styles.tagline}>{store.tagline}</p>
+            <h3 className={styles.fullname}>{store?.name}</h3>
+            <p className={styles.tagline}>{store?.tagline}</p>
           </div>
 
           <div className={styles.linkProfile}>
@@ -83,7 +83,7 @@ const MyStore = () => {
             <h3>Store Link</h3>
             <div className={styles.profileLink}>
               <p>
-                https://{process.env.DOMAIN}/store/{store.slug}
+                https://{process.env.DOMAIN}/store/{store?.id}
               </p>
               <span>
                 <FontAwesomeIcon
@@ -91,7 +91,7 @@ const MyStore = () => {
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.clipboard.writeText(
-                      `https://${process.env.DOMAIN}/store/${store.slug}`,
+                      `https://${process.env.DOMAIN}/store/${store?.id}`,
                     )
 
                     toast.success('Link Copied to clipboard')
@@ -102,9 +102,9 @@ const MyStore = () => {
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.share({
-                      title: `${store.name}`,
+                      title: `${store?.name}`,
                       text: `Hi, checkout my Store on Venndor. ${store.description}`,
-                      url: `https://${process.env.DOMAIN}/store/${store.slug}`,
+                      url: `https://${process.env.DOMAIN}/store/${store?.id}`,
                     })
                   }}
                 />
@@ -121,22 +121,22 @@ const MyStore = () => {
                     <FontAwesomeIcon icon={faLocationDot} />
                     Address:
                   </td>
-                  <td>{store.address}</td>
+                  <td>{store?.address}</td>
                 </tr>
                 <tr>
                   <td>
                     <FaLocationArrow />
                     State:
                   </td>
-                  <td>{store.state}</td>
+                  <td>{store?.state}</td>
                 </tr>
-                {store.district && (
+                {store?.district && (
                   <tr>
                     <td>
                       <FontAwesomeIcon icon={faLocationCrosshairs} />
                       L.G.A:
                     </td>
-                    <td>{store.district}</td>
+                    <td>{store?.district}</td>
                   </tr>
                 )}
                 <tr>
@@ -144,14 +144,14 @@ const MyStore = () => {
                     <FaEnvelope />
                     Email:
                   </td>
-                  <td>{store.email}</td>
+                  <td>{store?.email}</td>
                 </tr>
                 <tr>
                   <td>
                     <FaPhone />
                     Phone:
                   </td>
-                  <td>{store.contact}</td>
+                  <td>{store?.contact}</td>
                 </tr>
               </tbody>
             </table>
@@ -216,30 +216,30 @@ const MyStore = () => {
                 type="text"
                 label="Store name"
                 placeholder="Store name"
-                defaultValue={store.name}
+                defaultValue={store?.name}
                 required
               />
               <Input
                 type="text"
                 label="Tagline"
                 placeholder="Short slogan"
-                defaultValue={store.tagline}
+                defaultValue={store?.tagline}
                 msg="Optional"
               />
               <Textarea
                 label="Description"
                 placeholder="Describe your business. . ."
-                defaultValue={store.description}
+                defaultValue={store?.description}
                 required
               />
               <Input
                 type="text"
                 label="Address"
                 placeholder="Business Address"
-                defaultValue={store.address}
+                defaultValue={store?.address}
                 required
               />
-              <Select label="State" required defaultValue={store.state}>
+              <Select label="State" required defaultValue={store?.state}>
                 <option value="Abuja">Abuja</option>
                 {states.map((state, i) => (
                   <option value={state} key={i}>
@@ -252,7 +252,7 @@ const MyStore = () => {
                 type="text"
                 label="L.G.A"
                 placeholder="Local Area"
-                defaultValue={store.district}
+                defaultValue={store?.district}
                 msg="Optional"
               />
 
@@ -260,7 +260,7 @@ const MyStore = () => {
                 type="text"
                 label="Contact"
                 placeholder="070 0000 0000"
-                defaultValue={store.contact}
+                defaultValue={store?.contact}
                 required
               />
 
@@ -268,7 +268,7 @@ const MyStore = () => {
                 type="email"
                 label="Email"
                 placeholder="Your business email"
-                defaultValue={store.email}
+                defaultValue={store?.email}
                 msg="Optional"
               />
               <Button color="text">Update details</Button>

@@ -1,35 +1,35 @@
-import styles from "../../styles/pageStyles/Profile.module.css";
-import Image from "next/image";
-import storeAvatar from "../../public/images/storeAvatar.jpg";
-import userAvatar from "../../public/images/userAvatar.jpg";
-import LoadingImage from "../../components/ui/LoadingImage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from '../../styles/pageStyles/Profile.module.css'
+import Image from 'next/image'
+import storeAvatar from '../../public/images/storeAvatar.jpg'
+import userAvatar from '../../public/images/userAvatar.jpg'
+import LoadingImage from '../../components/ui/LoadingImage'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCopy,
   faLocationCrosshairs,
   faLocationDot,
   faShareNodes,
-} from "@fortawesome/free-solid-svg-icons";
-import { FaEnvelope, FaPhone, FaLocationArrow } from "react-icons/fa";
-import Button from "../../components/ui/Button";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import Router from "next/router";
-import Spinner from "../../components/ui/Spinner";
-import ProductCard from "../../components/ProductCard";
-import { GET_STORE } from "../../graphql/queries/storeQueries";
-import client from "../../apollo-client";
-import PageNotFound from "../../components/PageNotFound";
+} from '@fortawesome/free-solid-svg-icons'
+import { FaEnvelope, FaPhone, FaLocationArrow } from 'react-icons/fa'
+import Button from '../../components/ui/Button'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import Router from 'next/router'
+import Spinner from '../../components/ui/Spinner'
+import ProductCard from '../../components/ProductCard'
+import { GET_STORE } from '../../graphql/queries/storeQueries'
+import client from '../../apollo-client'
+import PageNotFound from '../../components/PageNotFound'
 
 const Store = ({ store }) => {
-  const [profileLoading, setProfileLoading] = useState(false);
-  const [productsLoading, setProductsLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false)
+  const [productsLoading, setProductsLoading] = useState(false)
 
-  if (!store) return <PageNotFound />;
+  if (!store) return <PageNotFound />
 
   return (
     <div className={styles.profile}>
-      <div className={[styles.container, styles.store].join(" ")}>
+      <div className={[styles.container, styles.store].join(' ')}>
         <div className={styles.detailsCol}>
           <h2 className={styles.heading}>Store</h2>
 
@@ -57,7 +57,7 @@ const Store = ({ store }) => {
             <h3>Store Link</h3>
             <div className={styles.profileLink}>
               <p>
-                https://{process.env.DOMAIN}/store/{store.slug}
+                https://{process.env.DOMAIN}/store/{store.id}
               </p>
               <span>
                 <FontAwesomeIcon
@@ -65,10 +65,10 @@ const Store = ({ store }) => {
                   className={styles.copyIcon}
                   onClick={() => {
                     navigator.clipboard.writeText(
-                      `https://${process.env.DOMAIN}/store/${store.slug}`
-                    );
+                      `https://${process.env.DOMAIN}/store/${store.id}`,
+                    )
 
-                    toast.success("Link Copied to clipboard");
+                    toast.success('Link Copied to clipboard')
                   }}
                 />
                 <FontAwesomeIcon
@@ -77,9 +77,9 @@ const Store = ({ store }) => {
                   onClick={() => {
                     navigator.share({
                       title: store.name,
-                      text: "Hi, checkout my store on Venndor.",
-                      url: `https://${process.env.DOMAIN}/store/${store.slug}`,
-                    });
+                      text: 'Hi, checkout my store on Venndor.',
+                      url: `https://${process.env.DOMAIN}/store/${store.id}`,
+                    })
                   }}
                 />
               </span>
@@ -158,8 +158,8 @@ const Store = ({ store }) => {
               color="text"
               disabled={profileLoading}
               onClick={() => {
-                Router.push(`/user/${store.account.username}`);
-                setProfileLoading(true);
+                Router.push(`/user/${store.account.username}`)
+                setProfileLoading(true)
               }}
             >
               {profileLoading ? (
@@ -167,7 +167,7 @@ const Store = ({ store }) => {
                   <Spinner size="sm" /> Loading
                 </>
               ) : (
-                "View Profile"
+                'View Profile'
               )}
             </Button>
           </div>
@@ -185,8 +185,8 @@ const Store = ({ store }) => {
                   color="text"
                   disabled={productsLoading}
                   onClick={() => {
-                    Router.push("/store/products/id");
-                    setProductsLoading(true);
+                    Router.push('/store/products/id')
+                    setProductsLoading(true)
                   }}
                 >
                   {productsLoading ? (
@@ -194,7 +194,7 @@ const Store = ({ store }) => {
                       <Spinner size="sm" /> Loading
                     </>
                   ) : (
-                    "View all Products"
+                    'View all Products'
                   )}
                 </Button>
               </>
@@ -205,22 +205,22 @@ const Store = ({ store }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Store;
+export default Store
 
 export const getServerSideProps = async ({ params }) => {
-  const slug = params.slug;
+  const id = params.id
 
   const { data } = await client.query({
     query: GET_STORE,
-    variables: { slug },
-  });
+    variables: { id },
+  })
 
   return {
     props: {
       store: data.store,
     },
-  };
-};
+  }
+}

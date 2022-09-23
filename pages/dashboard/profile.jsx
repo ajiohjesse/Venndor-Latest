@@ -34,7 +34,7 @@ import {
   UPDATE_ACCOUNT,
 } from '../../graphql/mutations/userMutations'
 
-const Profile = () => {
+const UserProfile = () => {
   const [trackLoading, setTrackLoading] = useState(false)
   const [storeLoading, setStoreLoading] = useState(false)
   const [createStoreLoading, setCreateStoreLoading] = useState(false)
@@ -410,4 +410,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default UserProfile

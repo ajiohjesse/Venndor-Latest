@@ -90,6 +90,7 @@
 
 .profileLink > p {
   overflow-x: auto;
+  max-width: 200px;
 }
 
 .profileLink > span {
@@ -246,6 +247,16 @@
   .contact {
     width: 100%;
     max-width: 100%;
+  }
+
+  .profileLink > p {
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 600px) {
+  .profileLink > p {
+    max-width: 300px;
   }
 }
 

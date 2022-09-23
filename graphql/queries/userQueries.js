@@ -22,7 +22,6 @@ export const GET_USER = gql`
         tagline
         state
         district
-        slug
         avatar {
           url
         }
