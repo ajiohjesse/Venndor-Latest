@@ -10,6 +10,14 @@ import axios from 'axios'
 import Spinner from '../../components/ui/Spinner'
 import { AuthContext } from '../../context/AuthContext'
 import Router from 'next/router'
+import { useMutation } from '@apollo/client'
+import {
+  CREATE_STORE,
+  PUBLISH_STORE,
+} from '../../graphql/mutations/storeMutations'
+import { GET_CURRENT_USER } from '../../graphql/queries/userQueries'
+import { GET_USER_STORE } from '../../graphql/queries/storeQueries'
+import { PUBLISH_ACCOUNT } from '../../graphql/mutations/userMutations'
 
 const CreateStore = () => {
   const [createStoreError, setCreateStoreError] = useState('')
@@ -23,6 +31,18 @@ const CreateStore = () => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value })
   }
 
+  const [createStore, { error }] = useMutation(CREATE_STORE, {
+    variables: credentials,
+  })
+
+  const [publishStore] = useMutation(PUBLISH_STORE, {
+    refetchQueries: [{ query: GET_CURRENT_USER, variables: { username } }],
+  })
+
+  const [publishUser] = useMutation(PUBLISH_ACCOUNT, {
+    variables: { username },
+  })
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -30,9 +50,24 @@ const CreateStore = () => {
 
     toast.loading('Creating Store. . .')
 
-    const { data } = await axios.post('/api/createStore', credentials)
+    /**
+     * check if user already has a store
+     */
 
-    if (data.success) {
+    /**
+     * check if store already exists
+     */
+
+    //create and publish store
+    await createStore()
+      .then(async (res) => {
+        await publishStore({ variables: { id: res.data.createStore.id } })
+        //update user
+        await publishUser()
+      })
+      .catch((error) => setRegisterError(error.message))
+
+    if (!error) {
       toast.dismiss()
       toast.success('Store Created!')
       Router.push('/dashboard/profile')
@@ -40,7 +75,7 @@ const CreateStore = () => {
       toast.dismiss()
       toast.error('Failed!')
       setLoading(false)
-      setRegisterError(data.message)
+      setRegisterError(error.message)
     }
   }
 

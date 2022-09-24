@@ -24,7 +24,7 @@ import Select from '../../components/ui/Select'
 import { AuthContext } from '../../context/AuthContext'
 import { GET_USER_STORE } from '../../graphql/queries/storeQueries'
 import { useQuery } from '@apollo/client'
-import { GET_USER } from '../../graphql/queries/userQueries'
+import { GET_CURRENT_USER, GET_USER } from '../../graphql/queries/userQueries'
 
 const MyStore = () => {
   const [trackLoading, setTrackLoading] = useState(false)
@@ -32,7 +32,7 @@ const MyStore = () => {
   const [deleteModal, setDeleteModalLoading] = useState(false)
   const { user: username } = useContext(AuthContext)
 
-  const { data: user } = useQuery(GET_USER, {
+  const { data: user } = useQuery(GET_CURRENT_USER, {
     variables: { username },
   })
 
