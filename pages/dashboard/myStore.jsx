@@ -22,7 +22,7 @@ import Spinner from '../../components/ui/Spinner'
 import { states } from '../../lib/selections'
 import Select from '../../components/ui/Select'
 import { AuthContext } from '../../context/AuthContext'
-import { GET_STORE } from '../../graphql/queries/storeQueries'
+import { GET_USER_STORE } from '../../graphql/queries/storeQueries'
 import { useQuery } from '@apollo/client'
 import { GET_USER } from '../../graphql/queries/userQueries'
 
@@ -38,7 +38,7 @@ const MyStore = () => {
 
   const id = user?.account.store.id
 
-  const { data, loading } = useQuery(GET_STORE, { variables: { id } })
+  const { data, loading } = useQuery(GET_USER_STORE, { variables: { id } })
 
   const store = data?.store
 

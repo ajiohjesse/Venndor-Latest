@@ -5,6 +5,8 @@ export default async function handler(req, res) {
 
   const token = cookies.VenndorUser
 
+  if (!token) return res.json(null)
+
   try {
     const { payload: user } = await jose.jwtVerify(
       token,

@@ -51,6 +51,12 @@ export const UPDATE_ACCOUNT = gql`
       }
       where: { username: $username }
     ) {
+      id
+      bio
+      phone
+      facebook
+      instagram
+      twitter
       username
     }
   }

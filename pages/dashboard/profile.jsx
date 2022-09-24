@@ -27,12 +27,15 @@ import Spinner from '../../components/ui/Spinner'
 import { useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { useMutation, useQuery } from '@apollo/client'
-import { GET_USER } from '../../graphql/queries/userQueries'
+import { GET_CURRENT_USER, GET_USER } from '../../graphql/queries/userQueries'
 import Cookies from 'js-cookie'
 import {
   PUBLISH_ACCOUNT,
   UPDATE_ACCOUNT,
 } from '../../graphql/mutations/userMutations'
+import verifyToken from '../../lib/verifyToken'
+import * as cookie from 'cookie'
+import client from '../../apollo-client'
 
 const UserProfile = () => {
   const [trackLoading, setTrackLoading] = useState(false)
@@ -43,7 +46,7 @@ const UserProfile = () => {
 
   const { user: username, dispatch } = useContext(AuthContext)
 
-  //get the user account information
+  // get the user account information
   const { data, loading } = useQuery(GET_USER, {
     variables: { username },
   })
@@ -65,9 +68,7 @@ const UserProfile = () => {
     UPDATE_ACCOUNT,
   )
 
-  const [publishAccount] = useMutation(PUBLISH_ACCOUNT, {
-    refetchQueries: [{ query: GET_USER, variables: { username } }],
-  })
+  const [publishAccount] = useMutation(PUBLISH_ACCOUNT)
 
   //handle change on details input fields
   const handleChangeDetails = (e) => {

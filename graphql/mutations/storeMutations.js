@@ -26,6 +26,18 @@ export const CREATE_STORE = gql`
       }
     ) {
       id
+      name
+      address
+      state
+      description
+      contact
+      district
+      email
+      tagline
+      account {
+        id
+        username
+      }
     }
   }
 `

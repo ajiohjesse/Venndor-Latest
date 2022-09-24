@@ -3,8 +3,11 @@ import {
   CREATE_STORE,
   PUBLISH_STORE,
 } from '../../graphql/mutations/storeMutations'
-import { GET_ALL_STORES } from '../../graphql/queries/storeQueries'
-import { GET_USER } from '../../graphql/queries/userQueries'
+import {
+  GET_ALL_STORES,
+  GET_USER_STORE,
+} from '../../graphql/queries/storeQueries'
+import { GET_CURRENT_USER, GET_USER } from '../../graphql/queries/userQueries'
 
 export default async ({ body }, res) => {
   /**
@@ -31,7 +34,11 @@ export default async ({ body }, res) => {
             id: result.data.createStore.id,
           },
           refetchQueries: [
-            { query: GET_USER, variables: { username: body.username } },
+            { query: GET_CURRENT_USER, variables: { username: body.username } },
+            {
+              query: GET_USER_STORE,
+              variables: { id: result.data.createStore.id },
+            },
           ],
         })
         .catch((error) =>
