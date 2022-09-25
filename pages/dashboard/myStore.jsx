@@ -23,26 +23,66 @@ import { states } from '../../lib/selections'
 import Select from '../../components/ui/Select'
 import { AuthContext } from '../../context/AuthContext'
 import { GET_USER_STORE } from '../../graphql/queries/storeQueries'
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { GET_CURRENT_USER, GET_USER } from '../../graphql/queries/userQueries'
+import {
+  PUBLISH_STORE,
+  UPDATE_USER_STORE,
+} from '../../graphql/mutations/storeMutations'
 
 const MyStore = () => {
   const [trackLoading, setTrackLoading] = useState(false)
   const [productsLoading, setProductsLoading] = useState(false)
   const [deleteModal, setDeleteModalLoading] = useState(false)
+
+  const [credentials, setCredentials] = useState({})
+
   const { user: username } = useContext(AuthContext)
 
-  const { data: user } = useQuery(GET_CURRENT_USER, {
+  const { data: user, error: userError } = useQuery(GET_CURRENT_USER, {
     variables: { username },
   })
 
   const id = user?.account.store.id
 
-  const { data, loading } = useQuery(GET_USER_STORE, { variables: { id } })
+  const { data, loading, error: storeError } = useQuery(GET_USER_STORE, {
+    variables: { id },
+  })
 
   const store = data?.store
 
-  return loading ? (
+  const [updateDetails, { loading: updateLoading }] = useMutation(
+    UPDATE_USER_STORE,
+  )
+
+  const [publishStore] = useMutation(PUBLISH_STORE)
+
+  //handle edit store form change
+
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, id, [e.target.id]: e.target.value })
+  }
+
+  //handle edit store form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    await updateDetails({
+      variables: credentials,
+    })
+      .then((res) => {
+        publishStore({
+          variables: { id: res.data.updateStore.id },
+        })
+
+        toast.success('Updated')
+      })
+      .catch((err) => console.log(err))
+  }
+
+  if (userError || storeError) return <div>Something went wrong</div>
+
+  return !data || loading ? (
     <div
       style={{
         width: '100%',
@@ -211,13 +251,14 @@ const MyStore = () => {
           </div>
 
           <div className={styles.editDetails}>
-            <form>
+            <form onChange={handleChange} onSubmit={handleSubmit}>
               <Input
                 type="text"
                 label="Store name"
                 placeholder="Store name"
                 defaultValue={store?.name}
                 required
+                id="name"
               />
               <Input
                 type="text"
@@ -225,12 +266,14 @@ const MyStore = () => {
                 placeholder="Short slogan"
                 defaultValue={store?.tagline}
                 msg="Optional"
+                id="tagline"
               />
               <Textarea
                 label="Description"
                 placeholder="Describe your business. . ."
                 defaultValue={store?.description}
                 required
+                id="description"
               />
               <Input
                 type="text"
@@ -238,8 +281,14 @@ const MyStore = () => {
                 placeholder="Business Address"
                 defaultValue={store?.address}
                 required
+                id="address"
               />
-              <Select label="State" required defaultValue={store?.state}>
+              <Select
+                label="State"
+                required
+                defaultValue={store?.state}
+                id="state"
+              >
                 <option value="Abuja">Abuja</option>
                 {states.map((state, i) => (
                   <option value={state} key={i}>
@@ -254,6 +303,7 @@ const MyStore = () => {
                 placeholder="Local Area"
                 defaultValue={store?.district}
                 msg="Optional"
+                id="district"
               />
 
               <Input
@@ -262,6 +312,7 @@ const MyStore = () => {
                 placeholder="070 0000 0000"
                 defaultValue={store?.contact}
                 required
+                id="contact"
               />
 
               <Input
@@ -270,8 +321,11 @@ const MyStore = () => {
                 placeholder="Your business email"
                 defaultValue={store?.email}
                 msg="Optional"
+                id="email"
               />
-              <Button color="text">Update details</Button>
+              <Button color="text" type="submit" disabled={updateLoading}>
+                Update details
+              </Button>
             </form>
           </div>
 

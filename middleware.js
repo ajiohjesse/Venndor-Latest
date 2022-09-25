@@ -42,19 +42,26 @@ export default async function middleware(req) {
    * hasnt created a store.
    */
   if (url.includes('/dashboard/myStore')) {
-    const { data } = await client.query({
-      query: GET_CURRENT_USER,
-      variables: {
-        username,
-      },
-      fetchPolicy: 'network-only',
-    })
+    await client
+      .query({
+        query: GET_CURRENT_USER,
+        variables: {
+          username,
+        },
+        fetchPolicy: 'network-only',
+      })
+      .then(({ data }) => {
+        if (!data.account.store) {
+          return NextResponse.rewrite(
+            new URL('/dashboard/createStore', req.nextUrl),
+          )
+        }
+      })
+      .catch((error) => {
+        console.log(error)
 
-    if (!data.account.store) {
-      return NextResponse.rewrite(
-        new URL('/dashboard/createStore', req.nextUrl),
-      )
-    }
+        return NextResponse.rewrite(new URL('/', req.nextUrl))
+      })
   }
 
   /**
@@ -63,16 +70,25 @@ export default async function middleware(req) {
    */
 
   if (url.includes('/dashboard/createStore')) {
-    const { data } = await client.query({
-      query: GET_CURRENT_USER,
-      variables: {
-        username,
-      },
-      fetchPolicy: 'network-only',
-    })
+    await client
+      .query({
+        query: GET_CURRENT_USER,
+        variables: {
+          username,
+        },
+        fetchPolicy: 'network-only',
+      })
+      .then(({ data }) => {
+        if (data?.account.store) {
+          return NextResponse.rewrite(
+            new URL('/dashboard/myStore', req.nextUrl),
+          )
+        }
+      })
+      .catch((error) => {
+        console.log(error)
 
-    if (data?.account.store) {
-      return NextResponse.rewrite(new URL('/dashboard/myStore', req.nextUrl))
-    }
+        return NextResponse.rewrite(new URL('/', req.nextUrl))
+      })
   }
 }

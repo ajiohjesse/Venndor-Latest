@@ -47,7 +47,7 @@ const UserProfile = () => {
   const { user: username, dispatch } = useContext(AuthContext)
 
   // get the user account information
-  const { data, loading } = useQuery(GET_USER, {
+  const { data, loading, error } = useQuery(GET_USER, {
     variables: { username },
   })
 
@@ -92,6 +92,10 @@ const UserProfile = () => {
         toast.success('Updated')
       })
       .catch((err) => console.log(err))
+  }
+
+  if (error) {
+    return <div>something went wrong</div>
   }
 
   return loading || loggingOut ? (
@@ -341,7 +345,7 @@ const UserProfile = () => {
                 msg="Link to Twitter profile"
                 id="twitter"
               />
-              <Button color="text" disabled={updateLoading}>
+              <Button color="text" disabled={updateLoading} type="submit">
                 Update details
               </Button>
             </form>

@@ -49,3 +49,41 @@ export const PUBLISH_STORE = gql`
     }
   }
 `
+
+export const UPDATE_USER_STORE = gql`
+  mutation updateUserStore(
+    $id: ID!
+    $name: String
+    $tagline: String
+    $state: String
+    $email: String
+    $district: String
+    $description: String
+    $contact: String
+    $address: String
+  ) {
+    updateStore(
+      where: { id: $id }
+      data: {
+        name: $name
+        tagline: $tagline
+        state: $state
+        email: $email
+        district: $district
+        description: $description
+        contact: $contact
+        address: $address
+      }
+    ) {
+      id
+      name
+      email
+      district
+      description
+      contact
+      state
+      tagline
+      address
+    }
+  }
+`

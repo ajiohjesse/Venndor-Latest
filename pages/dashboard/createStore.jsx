@@ -6,11 +6,10 @@ import styles from '../../styles/pageStyles/Auth.module.css'
 import Select from '../../components/ui/Select'
 import { states } from '../../lib/selections'
 import toast from 'react-hot-toast'
-import axios from 'axios'
 import Spinner from '../../components/ui/Spinner'
 import { AuthContext } from '../../context/AuthContext'
 import Router from 'next/router'
-import { useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
 import {
   CREATE_STORE,
   PUBLISH_STORE,
@@ -31,8 +30,12 @@ const CreateStore = () => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value })
   }
 
-  const [createStore, { error }] = useMutation(CREATE_STORE, {
+  const [createStore] = useMutation(CREATE_STORE, {
     variables: credentials,
+  })
+
+  const [getUserStore] = useLazyQuery(GET_USER_STORE, {
+    variables: { username },
   })
 
   const [publishStore] = useMutation(PUBLISH_STORE, {
@@ -50,33 +53,32 @@ const CreateStore = () => {
 
     toast.loading('Creating Store. . .')
 
-    /**
-     * check if user already has a store
-     */
-
-    /**
-     * check if store already exists
-     */
-
     //create and publish store
     await createStore()
       .then(async (res) => {
         await publishStore({ variables: { id: res.data.createStore.id } })
+
         //update user
         await publishUser()
-      })
-      .catch((error) => setRegisterError(error.message))
 
-    if (!error) {
-      toast.dismiss()
-      toast.success('Store Created!')
-      Router.push('/dashboard/profile')
-    } else {
-      toast.dismiss()
-      toast.error('Failed!')
-      setLoading(false)
-      setRegisterError(error.message)
-    }
+        /**
+         * get the created store so it can
+         * be added to the cache
+         */
+
+        await getUserStore()
+
+        toast.dismiss()
+        toast.success('Store Created!')
+        Router.push('/dashboard/myStore')
+      })
+      .catch((error) => {
+        setCreateStoreError(error.message)
+
+        toast.dismiss()
+        toast.error('Failed!')
+        setLoading(false)
+      })
   }
 
   return (
