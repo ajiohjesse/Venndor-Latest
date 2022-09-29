@@ -13,6 +13,7 @@ export const GET_USER_STORE = gql`
       email
       address
       avatar {
+        id
         url
       }
       account {
@@ -21,6 +22,7 @@ export const GET_USER_STORE = gql`
         username
         phone
         avatar {
+          id
           url
         }
       }
@@ -30,6 +32,7 @@ export const GET_USER_STORE = gql`
         price
         category
         image {
+          id
           url
         }
       }
@@ -49,6 +52,7 @@ export const GET_STORE = gql`
       email
       address
       avatar {
+        id
         url
       }
       account {
@@ -57,6 +61,7 @@ export const GET_STORE = gql`
         username
         phone
         avatar {
+          id
           url
         }
       }
@@ -66,6 +71,7 @@ export const GET_STORE = gql`
         price
         category
         image {
+          id
           url
         }
       }

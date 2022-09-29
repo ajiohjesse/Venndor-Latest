@@ -90,7 +90,10 @@ const UserProfile = () => {
 
         toast.success('Updated')
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(JSON.stringify(err, null, 2))
+        toast.error('Failed!')
+      })
   }
 
   if (loggingOut) {

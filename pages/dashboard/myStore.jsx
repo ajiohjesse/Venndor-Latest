@@ -29,6 +29,7 @@ import {
   PUBLISH_STORE,
   UPDATE_USER_STORE,
 } from '../../graphql/mutations/storeMutations'
+import UploadStorePic from '../../components/UploadStorePic'
 
 const MyStore = () => {
   const [trackLoading, setTrackLoading] = useState(false)
@@ -189,7 +190,7 @@ const MyStore = () => {
                 <tr>
                   <td>
                     <FaPhone />
-                    Phone:
+                    Contact:
                   </td>
                   <td>{store?.contact}</td>
                 </tr>
@@ -242,13 +243,11 @@ const MyStore = () => {
 
         <div className={styles.editCol}>
           <h2 className={styles.heading}>Update Info</h2>
-          <div className={styles.fileUpload}>
-            <input type="file" name="image" accept="image/*" />
-            <Button color="text">
-              <FontAwesomeIcon icon={faCamera} />
-              Upload Image
-            </Button>
-          </div>
+          <UploadStorePic
+            imageId={store.avatar.id || null}
+            storeId={id}
+            metadata={store?.name}
+          />
 
           <div className={styles.editDetails}>
             <form onChange={handleChange} onSubmit={handleSubmit}>

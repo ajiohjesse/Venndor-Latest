@@ -23,6 +23,20 @@ export const UPDATE_ASSET = gql`
   }
 `
 
+export const UPDATE_STORE_IMAGE = gql`
+  mutation updateStoreImage($id: ID!, $storeId: ID!, $filename: String) {
+    updateAsset(
+      data: {
+        fileName: $filename
+        avatarStore: { connect: { where: { id: $storeId } } }
+      }
+      where: { id: $id }
+    ) {
+      url
+    }
+  }
+`
+
 export const DELETE_ASSET = gql`
   mutation deleteAsset($id: ID!) {
     deleteAsset(where: { id: $id }) {

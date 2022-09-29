@@ -82,7 +82,7 @@ body[data-theme="light"] {
   --text-faded2: var(--black-faded2);
   --text-muted: var(--black-muted);
 
-  --price: var(--danger);
+  --price: rgb(0, 95, 82);
 
   --shadow-color: 0 0 8px var(--text-faded2);
 

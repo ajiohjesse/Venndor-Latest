@@ -10,12 +10,15 @@ import {
   DELETE_ASSET,
   PUBLISH_ASSET,
   UPDATE_ASSET,
+  UPDATE_STORE_IMAGE,
 } from '../graphql/mutations/AssetMutations'
 import { GET_CURRENT_USER, GET_USER_IMG } from '../graphql/queries/userQueries'
 import toast from 'react-hot-toast'
 import { PUBLISH_ACCOUNT } from '../graphql/mutations/userMutations'
+import { PUBLISH_STORE } from '../graphql/mutations/storeMutations'
+import { GET_USER_STORE } from '../graphql/queries/storeQueries'
 
-const UploadProfilePic = ({ username, metadata, imageId }) => {
+const UploadStorePic = ({ storeId, metadata, imageId }) => {
   const [src, setSrc] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -28,10 +31,10 @@ const UploadProfilePic = ({ username, metadata, imageId }) => {
    * Asset mutations
    */
   const [publishAsset] = useMutation(PUBLISH_ASSET)
-  const [updateAsset] = useMutation(UPDATE_ASSET)
+  const [updateAsset] = useMutation(UPDATE_STORE_IMAGE)
   const [deleteAsset] = useMutation(DELETE_ASSET)
-  const [publishAccount] = useMutation(PUBLISH_ACCOUNT, {
-    refetchQueries: [{ query: GET_CURRENT_USER, variables: { username } }],
+  const [publishStore] = useMutation(PUBLISH_STORE, {
+    refetchQueries: [{ query: GET_USER_STORE, variables: { id: storeId } }],
   })
 
   /**
@@ -47,6 +50,7 @@ const UploadProfilePic = ({ username, metadata, imageId }) => {
         return setUploadError('Selected file is not an image.')
       }
 
+      //limit file upload size to 1mb
       if (e.target.files[0].size > 1048576) {
         return setUploadError(
           'The file size must be no more than ' +
@@ -102,16 +106,16 @@ const UploadProfilePic = ({ username, metadata, imageId }) => {
           })
         }
 
-        //Attach uploaded asset to user
+        //Attach uploaded asset to store
         await updateAsset({
-          variables: { id: data.id, username, filename: metadata },
+          variables: { id: data.id, storeId, filename: metadata },
         })
 
         //publish asset
         await publishAsset({ variables: { id: data.id } })
 
         //publish user account
-        await publishAccount({ variables: { username } }).then(() => {
+        await publishStore({ variables: { id: storeId } }).then(() => {
           toast.success('Uploaded')
           cancelBtn.current.click()
         })
@@ -176,4 +180,4 @@ const UploadProfilePic = ({ username, metadata, imageId }) => {
   )
 }
 
-export default UploadProfilePic
+export default UploadStorePic
