@@ -1,11 +1,16 @@
-import styles from "../../styles/ui/Button.module.css";
+import { forwardRef } from 'react'
+import styles from '../../styles/ui/Button.module.css'
 
-const Button = ({ children, color = "primary", ...others }) => {
+const Button = forwardRef(({ children, color = 'primary', ...others }, ref) => {
   return (
-    <button className={[styles.btn, styles[color]].join(" ")} {...others}>
+    <button
+      ref={ref}
+      className={[styles.btn, styles[color]].join(' ')}
+      {...others}
+    >
       {children}
     </button>
-  );
-};
+  )
+})
 
-export default Button;
+export default Button

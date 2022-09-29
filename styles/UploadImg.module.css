@@ -1,0 +1,25 @@
+.preview {
+  display: flex;
+  margin-inline: auto;
+  margin-bottom: 2rem;
+  width: max-content;
+  border: 1px solid var(--text-faded);
+  padding: 1rem;
+}
+
+.fileUpload > form {
+  display: grid;
+  gap: 1rem;
+}
+
+.error {
+  text-align: center;
+  color: var(--danger);
+}
+
+.fileUpload > form > button[type='reset'] {
+  background-color: var(--text);
+  border-radius: 20px;
+  color: var(--bg);
+  padding-block: 0.8rem;
+}

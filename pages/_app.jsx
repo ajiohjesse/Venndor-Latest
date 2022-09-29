@@ -11,9 +11,6 @@ import NextProgress from 'next-progress'
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <Head>
-        <title>Venndor - The Online Marketplace</title>
-      </Head>
       <AuthContextProvider>
         <ApolloProvider client={client}>
           <Layout>

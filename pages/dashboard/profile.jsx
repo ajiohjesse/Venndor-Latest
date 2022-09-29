@@ -33,9 +33,8 @@ import {
   PUBLISH_ACCOUNT,
   UPDATE_ACCOUNT,
 } from '../../graphql/mutations/userMutations'
-import verifyToken from '../../lib/verifyToken'
-import * as cookie from 'cookie'
-import client from '../../apollo-client'
+import axios from 'axios'
+import UploadProfilePic from '../../components/UploadProfilePic'
 
 const UserProfile = () => {
   const [trackLoading, setTrackLoading] = useState(false)
@@ -94,11 +93,26 @@ const UserProfile = () => {
       .catch((err) => console.log(err))
   }
 
+  if (loggingOut) {
+    return (
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          paddingBlock: '100px',
+        }}
+      >
+        <Spinner />
+      </div>
+    )
+  }
+
   if (error) {
     return <div>something went wrong</div>
   }
 
-  return loading || loggingOut ? (
+  return loading ? (
     <div
       style={{
         width: '100%',
@@ -312,13 +326,11 @@ const UserProfile = () => {
 
         <div className={styles.editCol}>
           <h2 className={styles.heading}>Update Info</h2>
-          <div className={styles.fileUpload}>
-            <input type="file" name="image" accept="image/*" />
-            <Button color="text">
-              <FontAwesomeIcon icon={faCamera} />
-              Upload Image
-            </Button>
-          </div>
+          <UploadProfilePic
+            username={username}
+            metadata={`${user?.firstname}_${user?.lastname}`}
+            imageId={user?.avatar ? user.avatar.id : null}
+          />
 
           <div className={styles.editDetails}>
             <form onChange={handleChangeDetails} onSubmit={handleSubmitDetails}>

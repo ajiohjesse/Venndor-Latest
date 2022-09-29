@@ -14,6 +14,7 @@ export const GET_CURRENT_USER = gql`
       instagram
       twitter
       avatar {
+        id
         url
       }
       store {
@@ -23,6 +24,7 @@ export const GET_CURRENT_USER = gql`
         state
         district
         avatar {
+          id
           url
         }
       }
@@ -43,6 +45,7 @@ export const GET_USER = gql`
       instagram
       twitter
       avatar {
+        id
         url
       }
       store {
@@ -52,6 +55,7 @@ export const GET_USER = gql`
         state
         district
         avatar {
+          id
           url
         }
       }
@@ -71,6 +75,7 @@ export const GET_USER_IMG = gql`
   query getuserImage($username: String!) {
     account(where: { username: $username }) {
       avatar {
+        id
         url
       }
     }
