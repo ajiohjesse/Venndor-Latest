@@ -10,6 +10,7 @@ export default async function handler(req, res) {
     variables: {
       username,
     },
+    fetchPolicy: 'network-only',
   })
 
   if (!data.account)

@@ -33,9 +33,17 @@ const Login = () => {
 
         Router.push('/dashboard/profile')
       })
-      .catch((err) =>
-        dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data }),
-      )
+      .catch((err) => {
+        if (err.status === 500) {
+          console.log(err)
+          return dispatch({
+            type: 'LOGIN_FAILURE',
+            payload: 'Something went wrong. Please try again.',
+          })
+        }
+
+        dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data })
+      })
   }
 
   return (

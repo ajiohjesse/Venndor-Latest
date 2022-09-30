@@ -5,7 +5,6 @@ import storeAvatar from '../../public/images/storeAvatar.jpg'
 import LoadingImage from '../../components/ui/LoadingImage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCamera,
   faCopy,
   faShareNodes,
   faTriangleExclamation,
@@ -35,6 +34,7 @@ import {
 } from '../../graphql/mutations/userMutations'
 import axios from 'axios'
 import UploadProfilePic from '../../components/UploadProfilePic'
+import ChangePassword from '../../components/ChangePassword'
 
 const UserProfile = () => {
   const [trackLoading, setTrackLoading] = useState(false)
@@ -49,7 +49,7 @@ const UserProfile = () => {
   const { user: username, dispatch } = useContext(AuthContext)
 
   // get the user account information
-  const { data, loading, error } = useQuery(GET_USER, {
+  const { data, loading, error } = useQuery(GET_CURRENT_USER, {
     variables: { username },
   })
 
@@ -430,12 +430,7 @@ const UserProfile = () => {
           <div className={styles.editPassword}>
             <h2 className={styles.heading}>Change Password</h2>
 
-            <form>
-              <Input label="Current password" type="password" />
-              <Input label="New password" type="password" />
-              <Input label="Repeat New password" type="password" />
-              <Button color="text">Update password</Button>
-            </form>
+            <ChangePassword username={username}/>
           </div>
 
           <div className={styles.editPassword}>

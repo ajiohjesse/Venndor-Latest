@@ -68,3 +68,17 @@ export const DELETE_ACCOUNT = gql`
     }
   }
 `
+export const UPDATE_USER_PASSWORD = gql`
+  mutation updateUserPassword($username: String!, $password: String!) {
+    updateAccount(
+      data: { password: $password }
+      where: { username: $username }
+    ) {
+      id
+      password
+    }
+    publishAccount(where: { username: $username }, to: PUBLISHED) {
+      id
+    }
+  }
+`
