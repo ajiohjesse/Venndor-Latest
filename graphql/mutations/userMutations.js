@@ -61,3 +61,10 @@ export const UPDATE_ACCOUNT = gql`
     }
   }
 `
+export const DELETE_ACCOUNT = gql`
+  mutation deleteAccount($username: String!) {
+    deleteAccount(where: { username: $username }) {
+      id
+    }
+  }
+`

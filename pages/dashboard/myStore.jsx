@@ -122,7 +122,7 @@ const MyStore = () => {
         await axios
           .post('/api/deleteStore', {
             storeId: id,
-            imageId: store.avatar.id,
+            imageId: store.avatar?.id || null,
           })
           .then(async ({ data }) => {
             // publish the user account
@@ -400,9 +400,13 @@ const MyStore = () => {
                     <span>
                       <FontAwesomeIcon icon={faTriangleExclamation} />
                     </span>
-                    Warning!!! You are about to delete your Store. This will
-                    remove all listed products. You cannot undo this action.
-                    Enter your Password to proceed.
+                    Warning!!! You are about to delete your Store.
+                    <br />
+                    <br />
+                    This will delete all LISTED PRODUCTS.
+                    <br />
+                    <br />
+                    You cannot undo this action. Enter your Password to proceed.
                   </p>
                   {deleteStoreError && (
                     <p style={{ color: 'var(--danger)' }}>{deleteStoreError}</p>
@@ -416,7 +420,7 @@ const MyStore = () => {
                   <Button
                     color="danger"
                     onClick={handleDeleteStore}
-                    disabled={deleteLoading}
+                    disabled={deleteLoading || !inputPassword}
                   >
                     {deleteLoading ? (
                       <>

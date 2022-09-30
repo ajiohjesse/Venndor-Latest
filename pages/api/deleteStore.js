@@ -14,11 +14,12 @@ export default async function handler(req, res) {
    * and store image associated to the store
    */
 
-  //delete store image
-  await client
-    .mutate({ mutation: DELETE_ASSET, variables: { id: imageId } })
-    .catch((err) => res.json(JSON.stringify(err, null, 2)))
-
+  //delete store image if it exists
+  if (imageId) {
+    await client
+      .mutate({ mutation: DELETE_ASSET, variables: { id: imageId } })
+      .catch((err) => res.json(JSON.stringify(err, null, 2)))
+  }
   //delete all products image
   await client
     .mutate({

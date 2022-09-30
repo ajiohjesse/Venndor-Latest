@@ -40,8 +40,11 @@ const UserProfile = () => {
   const [trackLoading, setTrackLoading] = useState(false)
   const [storeLoading, setStoreLoading] = useState(false)
   const [createStoreLoading, setCreateStoreLoading] = useState(false)
-  const [deleteModal, setDeleteModalLoading] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
+  const [deleteAccountError, setDeleteAccountError] = useState('')
+  const [inputPassword, setInputPassword] = useState('')
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   const { user: username, dispatch } = useContext(AuthContext)
 
@@ -95,6 +98,64 @@ const UserProfile = () => {
         toast.error('Failed!')
       })
   }
+
+  /**
+   * Delete account
+   */
+
+  const handlePassword = (e) => {
+    setInputPassword(e.target.value)
+    setDeleteAccountError('')
+  }
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true)
+    //verify user password
+    await axios
+      .post('/api/verifyPassword', {
+        username,
+        password: inputPassword,
+      })
+      .then(async ({ data }) => {
+        if (!data.success) {
+          setDeleteLoading(false)
+          return setDeleteAccountError(data.message)
+        }
+
+        //send request to delete user store if it exists
+        if (user?.store?.id) {
+          await axios.post('/api/deleteStore', {
+            storeId: user.store.id,
+            imageId: user.store.avatar?.id || null,
+          })
+        }
+
+        //send request to delete user account
+        await axios
+          .post('/api/deleteAccount', {
+            username,
+            imageId: user?.avatar?.id || null,
+          })
+          .then(async ({ data }) => {
+            if (data.success) {
+              toast.success(data.message)
+
+              handleLogout()
+            } else {
+              toast.error('Failed!')
+              console.log(data)
+            }
+          })
+          .catch((err) => console.log(JSON.stringify(err, null, 2)))
+          .finally(() => {
+            setDeleteLoading(false)
+          })
+      })
+  }
+
+  /**
+   * end Delete account
+   */
 
   if (loggingOut) {
     return (
@@ -393,15 +454,46 @@ const UserProfile = () => {
                     <span>
                       <FontAwesomeIcon icon={faTriangleExclamation} />
                     </span>
-                    Warning!!! You are about to delete your Venndor Account. You
-                    cannot undo this action. Enter your Password to proceed.
+                    Warning!!! You are about to delete your Venndor Account.
+                    <br />
+                    <br />
+                    Your STORE and LISTED PRODUCTS will also be deleted!
+                    <br />
+                    <br />
+                    You cannot undo this action. Enter your Password to proceed.
                   </p>
 
-                  <Input type="password" label="Password" />
-                  <Button color="danger">Delete</Button>
+                  {deleteAccountError && (
+                    <p style={{ color: 'var(--danger)' }}>
+                      {deleteAccountError}
+                    </p>
+                  )}
+
+                  <Input
+                    type="password"
+                    label="Password"
+                    onChange={handlePassword}
+                  />
+                  <Button
+                    color="danger"
+                    onClick={handleDeleteAccount}
+                    disabled={deleteLoading || !inputPassword}
+                  >
+                    {deleteLoading ? (
+                      <>
+                        <Spinner size="sm" /> Deleting
+                      </>
+                    ) : (
+                      ' Delete'
+                    )}
+                  </Button>
                   <Button
                     color="text"
-                    onClick={() => setDeleteModalLoading(false)}
+                    onClick={() => {
+                      setDeleteModal(false)
+                      setDeleteAccountError('')
+                    }}
+                    disabled={deleteLoading}
                   >
                     Cancel
                   </Button>
@@ -414,10 +506,7 @@ const UserProfile = () => {
                     </span>
                     Delete Account
                   </h3>
-                  <Button
-                    color="danger"
-                    onClick={() => setDeleteModalLoading(true)}
-                  >
+                  <Button color="danger" onClick={() => setDeleteModal(true)}>
                     Delete
                   </Button>
                 </>
