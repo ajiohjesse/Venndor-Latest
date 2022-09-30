@@ -87,3 +87,11 @@ export const UPDATE_USER_STORE = gql`
     }
   }
 `
+export const DELETE_STORE = gql`
+  mutation deleteStore($storeId: ID!) {
+    deleteStore(where: { id: $storeId }) {
+      id
+      name
+    }
+  }
+`

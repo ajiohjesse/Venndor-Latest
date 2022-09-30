@@ -44,3 +44,19 @@ export const DELETE_ASSET = gql`
     }
   }
 `
+export const DELETE_ALL_STORE_PRODUCT_IMAGES = gql`
+  mutation deleteAllStoreProductImages($storeId: ID!) {
+    deleteManyAssets(
+      where: { imageProduct_every: { store: { id: $storeId } } }
+    ) {
+      count
+    }
+  }
+`
+export const DELETE_ALL_STORE_PRODUCTS = gql`
+  mutation deleteAllStoreProducts($storeId: ID!) {
+    deleteManyProducts(where: { store: { id: $storeId } }) {
+      count
+    }
+  }
+`

@@ -30,11 +30,19 @@ import {
   UPDATE_USER_STORE,
 } from '../../graphql/mutations/storeMutations'
 import UploadStorePic from '../../components/UploadStorePic'
+import axios from 'axios'
+import {
+  PUBLISH_ACCOUNT,
+  UPDATE_ACCOUNT,
+} from '../../graphql/mutations/userMutations'
 
 const MyStore = () => {
   const [trackLoading, setTrackLoading] = useState(false)
   const [productsLoading, setProductsLoading] = useState(false)
-  const [deleteModal, setDeleteModalLoading] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [deleteStoreError, setDeleteStoreError] = useState('')
+  const [inputPassword, setInputPassword] = useState('')
 
   const [credentials, setCredentials] = useState({})
 
@@ -44,7 +52,7 @@ const MyStore = () => {
     variables: { username },
   })
 
-  const id = user?.account.store.id
+  const id = user?.account.store?.id
 
   const { data, loading, error: storeError } = useQuery(GET_USER_STORE, {
     variables: { id },
@@ -57,6 +65,12 @@ const MyStore = () => {
   )
 
   const [publishStore] = useMutation(PUBLISH_STORE)
+
+  //called when deleting store
+  const [publishAccount] = useMutation(PUBLISH_ACCOUNT, {
+    variables: { username },
+    refetchQueries: [{ query: GET_CURRENT_USER, variables: { username } }],
+  })
 
   //handle edit store form change
 
@@ -79,6 +93,55 @@ const MyStore = () => {
         toast.success('Updated')
       })
       .catch((err) => console.log(err))
+  }
+
+  /**
+   * delete store functionality
+   */
+
+  const handlePassword = (e) => {
+    setInputPassword(e.target.value)
+    setDeleteStoreError('')
+  }
+
+  const handleDeleteStore = async () => {
+    setDeleteLoading(true)
+    //verify user password
+    await axios
+      .post('/api/verifyPassword', {
+        username,
+        password: inputPassword,
+      })
+      .then(async ({ data }) => {
+        if (!data.success) {
+          setDeleteLoading(false)
+          return setDeleteStoreError(data.message)
+        }
+
+        //send request to delete store
+        await axios
+          .post('/api/deleteStore', {
+            storeId: id,
+            imageId: store.avatar.id,
+          })
+          .then(async ({ data }) => {
+            // publish the user account
+            await publishAccount()
+
+            if (data.success) {
+              toast.success(data.message)
+
+              Router.push('/dashboard/profile')
+            } else {
+              toast.error('Failed!')
+              console.log(data)
+            }
+          })
+          .catch((err) => console.log(JSON.stringify(err, null, 2)))
+          .finally(() => {
+            setDeleteLoading(false)
+          })
+      })
   }
 
   if (userError || storeError) return <div>Something went wrong</div>
@@ -244,7 +307,7 @@ const MyStore = () => {
         <div className={styles.editCol}>
           <h2 className={styles.heading}>Update Info</h2>
           <UploadStorePic
-            imageId={store.avatar.id || null}
+            imageId={store?.avatar?.id || null}
             storeId={id}
             metadata={store?.name}
           />
@@ -341,12 +404,35 @@ const MyStore = () => {
                     remove all listed products. You cannot undo this action.
                     Enter your Password to proceed.
                   </p>
+                  {deleteStoreError && (
+                    <p style={{ color: 'var(--danger)' }}>{deleteStoreError}</p>
+                  )}
 
-                  <Input type="password" label="Password" />
-                  <Button color="danger">Delete</Button>
+                  <Input
+                    type="password"
+                    label="Password"
+                    onChange={handlePassword}
+                  />
+                  <Button
+                    color="danger"
+                    onClick={handleDeleteStore}
+                    disabled={deleteLoading}
+                  >
+                    {deleteLoading ? (
+                      <>
+                        <Spinner size="sm" /> Deleting
+                      </>
+                    ) : (
+                      ' Delete'
+                    )}
+                  </Button>
                   <Button
                     color="text"
-                    onClick={() => setDeleteModalLoading(false)}
+                    onClick={() => {
+                      setDeleteModal(false)
+                      setDeleteStoreError('')
+                    }}
+                    disabled={deleteLoading}
                   >
                     Cancel
                   </Button>
@@ -359,10 +445,7 @@ const MyStore = () => {
                     </span>
                     Delete Store
                   </h3>
-                  <Button
-                    color="danger"
-                    onClick={() => setDeleteModalLoading(true)}
-                  >
+                  <Button color="danger" onClick={() => setDeleteModal(true)}>
                     Delete
                   </Button>
                 </>
