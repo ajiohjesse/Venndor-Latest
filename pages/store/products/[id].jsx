@@ -70,7 +70,10 @@ const AllStoreProducts = ({ storeId }) => {
       <h2 className={styles.storeName}>
         Store Name: <span>{store.name}</span>
       </h2>
-      <h2 className={styles.pageTitle}>All Products:</h2>
+      <h2 className={styles.pageTitle}>
+        All Products:{' '}
+        <span style={{ color: 'var(--primary)' }}>{pageSize}</span>
+      </h2>
 
       <div className={styles.wrapper}>
         <div className={styles.container}>

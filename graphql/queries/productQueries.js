@@ -34,6 +34,38 @@ export const GET_TOTAL_LISTED_PRODUCTS = gql`
     }
   }
 `
+
+export const GET_ALL_PRODUCTS = gql`
+  query getAllProducts($first: Int, $skip: Int) {
+    products(first: $first, skip: $skip, orderBy: createdAt_DESC) {
+      id
+      category
+      name
+      price
+      image {
+        id
+        url
+      }
+      store {
+        id
+        name
+        state
+        district
+      }
+    }
+  }
+`
+
+export const GET_TOTAL_PRODUCTS = gql`
+  query getTotalProducts {
+    productsConnection {
+      aggregate {
+        count
+      }
+    }
+  }
+`
+
 export const GET_PRODUCT = gql`
   query getProduct($id: ID!) {
     product(where: { id: $id }) {

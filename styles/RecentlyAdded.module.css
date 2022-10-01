@@ -25,3 +25,56 @@
     grid-template-columns: 1fr;
   }
 }
+
+.paginationWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.paginationInput {
+  margin-bottom: 2rem;
+  width: 150px;
+  text-align: right;
+  align-self: flex-end;
+
+}
+
+.pagination {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.pageCount {
+  font-weight: 500;
+}
+
+.paginationBtns {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.paginationBtns > button {
+  background-color: var(--primary);
+  color: var(--fff);
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.paginationBtns > button:hover {
+  opacity: 0.65;
+}
+
+.paginationBtns > button:active {
+  transform: scale(0.9);
+}
+
+.paginationBtns > button:disabled {
+  background-color: var(--text-faded);
+}
