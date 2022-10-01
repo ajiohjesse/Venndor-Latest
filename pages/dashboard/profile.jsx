@@ -218,9 +218,9 @@ const UserProfile = () => {
           <div className={styles.linkProfile}>
             <h3>Profile Link</h3>
             <div className={styles.profileLink}>
-              <p>
+              {/* <p>
                 https://{process.env.DOMAIN}/user/{user?.username}
-              </p>
+              </p> */}
               <span>
                 <FontAwesomeIcon
                   icon={faCopy}

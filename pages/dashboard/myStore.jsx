@@ -186,9 +186,9 @@ const MyStore = () => {
           <div className={styles.linkProfile}>
             <h3>Store Link</h3>
             <div className={styles.profileLink}>
-              <p>
+              {/* <p>
                 https://{process.env.DOMAIN}/store/{store?.id}
-              </p>
+              </p> */}
               <span>
                 <FontAwesomeIcon
                   icon={faCopy}

@@ -34,7 +34,13 @@ const UploadStorePic = ({ storeId, metadata, imageId }) => {
   const [updateAsset] = useMutation(UPDATE_STORE_IMAGE)
   const [deleteAsset] = useMutation(DELETE_ASSET)
   const [publishStore] = useMutation(PUBLISH_STORE, {
-    refetchQueries: [{ query: GET_USER_STORE, variables: { id: storeId } }],
+    refetchQueries: [
+      {
+        query: GET_USER_STORE,
+        variables: { id: storeId },
+        fetchPolicy: 'network-only',
+      },
+    ],
   })
 
   /**

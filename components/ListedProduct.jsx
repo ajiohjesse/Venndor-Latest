@@ -1,53 +1,50 @@
-import styles from "../styles/ListedProduct.module.css";
+import styles from '../styles/ListedProduct.module.css'
 import {
-  faEdit,
   faEye,
   faTrash,
   faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import product from "../public/images/shoe.jpg";
-import Image from "next/image";
-import { useState } from "react";
-import Spinner from "./ui/Spinner";
-import Router from "next/router";
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Image from 'next/image'
+import { useState } from 'react'
+import Spinner from './ui/Spinner'
+import Router from 'next/router'
 
-const ListedProduct = () => {
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [productLoading, setProductLoading] = useState(false);
-
+const ListedProduct = ({ product }) => {
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [productLoading, setProductLoading] = useState(false)
 
   return (
     <div className={styles.row}>
       <div className={styles.image}>
         <Image
-          src={product}
+          src={product.image.url}
           layout="fill"
           objectFit="cover"
           objectPosition="top"
-          alt="product"
+          alt={product.name}
         />
       </div>
       <div className={styles.orderDetails}>
-        <p className={styles.title}>Unisex Vintage shirts</p>
+        <p className={styles.title}>{product.name}</p>
         <div className={styles.storeName}>
           <span>Price: </span>
           <span className={styles.price}>
-            &#8358; {(5000).toLocaleString("en-Us")}
+            &#8358; {product.price.toLocaleString('en-Us')}
           </span>
         </div>
 
         <div className={styles.storeName}>
-          <span>Categroy: </span>
-          <span className={styles.category}>Male Fashion</span>
+          <span>Category: </span>
+          <span className={styles.category}>{product.category}</span>
         </div>
 
         <div className={styles.buttons}>
-        <button
+          <button
             className={styles.view}
             onClick={() => {
-              setProductLoading(true);
-              Router.push("/product/id");
+              setProductLoading(true)
+              Router.push(`/product/${product.id}`)
             }}
           >
             {productLoading ? (
@@ -88,7 +85,7 @@ const ListedProduct = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ListedProduct;
+export default ListedProduct
