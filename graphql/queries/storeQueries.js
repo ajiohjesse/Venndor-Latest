@@ -70,6 +70,12 @@ export const GET_STORE = gql`
         name
         price
         category
+        store {
+          id
+          name
+          state
+          district
+        }
         image {
           id
           url

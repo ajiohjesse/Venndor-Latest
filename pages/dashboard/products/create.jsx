@@ -42,10 +42,17 @@ const CreateProduct = () => {
 
   const [publishAsset] = useMutation(PUBLISH_ASSET)
   const [createProduct] = useMutation(CREATE_PRODUCT)
+
   const [publishProduct] = useMutation(PUBLISH_PRODUCT)
   const [publishStore] = useMutation(PUBLISH_STORE, {
     variables: { id: storeId },
-    refetchQueries: [{ query: GET_STORE_PRODUCTS, variables: { storeId } }],
+    refetchQueries: [
+      {
+        query: GET_STORE_PRODUCTS,
+        variables: { storeId },
+        fetchPolicy: 'network-only',
+      },
+    ],
   })
 
   const handleChange = (name, e) => {
@@ -116,11 +123,6 @@ const CreateProduct = () => {
     })
       .then((res) => res.json())
       .then(async (data) => {
-        //publish asset
-        await publishAsset({ variables: { id: data.id } }).then(() =>
-          toast.success('Image uploaded'),
-        )
-
         //create product
         await createProduct({
           variables: {
@@ -131,6 +133,11 @@ const CreateProduct = () => {
           //publish  product
           await publishProduct({ variables: { id: data.createProduct.id } })
         })
+
+        //publish asset
+        await publishAsset({ variables: { id: data.id } }).then(() =>
+          toast.success('Image uploaded'),
+        )
 
         //publish store
         await publishStore()

@@ -178,14 +178,14 @@ const Store = ({ store }) => {
               <>
                 <div className={styles.storeListings}>
                   {store.products.map((product, i) => (
-                    <ProductCard id={product.id} key={i} />
+                    <ProductCard product={product} key={i} />
                   ))}
                 </div>
                 <Button
                   color="text"
                   disabled={productsLoading}
                   onClick={() => {
-                    Router.push('/store/products/id')
+                    Router.push(`/store/products/${store.id}`)
                     setProductsLoading(true)
                   }}
                 >

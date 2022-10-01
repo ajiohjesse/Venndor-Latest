@@ -21,6 +21,13 @@ export const CREATE_PRODUCT = gql`
     ) {
       id
       name
+      price
+      category
+      description
+      image {
+        id
+        url
+      }
     }
   }
 `

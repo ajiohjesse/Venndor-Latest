@@ -265,7 +265,6 @@ const MyStore = () => {
             <h2 className={styles.heading}>Listed Products</h2>
             <h4>Add new products and view products you've listed:</h4>
             <Button
-              color="text"
               disabled={productsLoading}
               onClick={() => {
                 Router.push('/dashboard/products')
