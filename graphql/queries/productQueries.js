@@ -81,6 +81,9 @@ export const GET_PRODUCT = gql`
         contact
         state
         district
+        account {
+          username
+        }
       }
       image {
         url

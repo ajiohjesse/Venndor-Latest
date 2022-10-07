@@ -9,8 +9,51 @@ import client from '../../apollo-client'
 import { GET_PRODUCT } from '../../graphql/queries/productQueries'
 import Router from 'next/router'
 import moment from 'moment/moment'
+import { useMutation } from '@apollo/client'
+import {
+  CREATE_ORDER,
+  PUBLISH_ORDER,
+} from '../../graphql/mutations/OrderMutations'
+import { useContext, useState } from 'react'
+import { AuthContext } from '../../context/AuthContext'
+import toast from 'react-hot-toast'
+import Spinner from '../../components/ui/Spinner'
+import Modal from '../../components/ui/Modal'
+import ClientOnly from '../../components/ClientOnly'
 
 const SingleProduct = ({ product }) => {
+  const [updateLoading, setUpdateLoading] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const { user: username } = useContext(AuthContext)
+
+  const [createOrder] = useMutation(CREATE_ORDER, {
+    variables: {
+      productId: product.id,
+      storeId: product.store.id,
+      username,
+    },
+  })
+
+  const [publishOrder] = useMutation(PUBLISH_ORDER)
+
+  const handleOrder = async () => {
+    setUpdateLoading(true)
+
+    await createOrder()
+      .then(async ({ data }) => {
+        await publishOrder({ variables: { id: data.createOrder.id } })
+      })
+      .then(() => {
+        toast.success('Successful')
+        setModalOpen(true)
+      })
+      .catch((err) => {
+        console.log(JSON.stringify(err, null, 2))
+      })
+      .finally(setUpdateLoading(false))
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -79,10 +122,57 @@ const SingleProduct = ({ product }) => {
             <p>{product.description}</p>
           </div>
           <div className={styles.request}>
-            <h3>Request for this product</h3>
-            <Button color="text">
-              <FontAwesomeIcon icon={faShoppingCart} /> Send Request
-            </Button>
+            {modalOpen && (
+              <Modal>
+                <div className={styles.modalContentWrapper}>
+                  <div className={styles.modalContent}>
+                    <p>
+                      You have successfully requested for this product. The
+                      seller will contact you to confirm your order.
+                      <br />
+                      <br />
+                      You can track your orders by clicking the track button
+                      below.
+                    </p>
+                    <div className={styles.modalButtons}>
+                      <button
+                        type="button"
+                        onClick={() => Router.push('/dashboard/myOrders')}
+                      >
+                        Track
+                      </button>
+                      <button type="button" onClick={() => setModalOpen(false)}>
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Modal>
+            )}
+            <ClientOnly>
+              <h3>
+                {product.store.account.username === username
+                  ? 'This product belongs to you.'
+                  : 'Request for this product'}
+              </h3>
+              {product.store.account.username !== username && (
+                <Button
+                  color="text"
+                  onClick={handleOrder}
+                  disabled={updateLoading}
+                >
+                  {updateLoading ? (
+                    <>
+                      <Spinner size="sm" /> Loading
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faShoppingCart} /> Send Request
+                    </>
+                  )}
+                </Button>
+              )}
+            </ClientOnly>
           </div>
         </div>
       </div>

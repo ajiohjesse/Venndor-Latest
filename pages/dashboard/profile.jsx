@@ -422,7 +422,14 @@ const UserProfile = () => {
                 id="twitter"
               />
               <Button color="text" disabled={updateLoading} type="submit">
-                Update details
+                {updateLoading ? (
+                  <>
+                    <Spinner size="sm" />
+                    Loading
+                  </>
+                ) : (
+                  'Update details'
+                )}
               </Button>
             </form>
           </div>
@@ -430,7 +437,7 @@ const UserProfile = () => {
           <div className={styles.editPassword}>
             <h2 className={styles.heading}>Change Password</h2>
 
-            <ChangePassword username={username}/>
+            <ChangePassword username={username} />
           </div>
 
           <div className={styles.editPassword}>

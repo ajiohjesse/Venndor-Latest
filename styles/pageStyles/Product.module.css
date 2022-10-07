@@ -93,3 +93,34 @@
     height: 300px;
   }
 }
+
+.modalContentWrapper {
+  width: 90%;
+  max-width: 500px;
+  margin-inline: auto;
+  background-color: var(--bg);
+  color: var(--text);
+  padding: 2rem;
+  box-shadow: var(--shadow-color);
+}
+
+.modalButtons {
+  display: flex;
+  gap: 2rem;
+}
+
+.modalButtons > button {
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 5px 16px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.modalButtons > button:hover {
+  opacity: 0.6;
+}
+
+.modalButtons > button:active {
+  transform: scale(0.8);
+}

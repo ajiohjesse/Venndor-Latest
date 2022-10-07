@@ -385,7 +385,14 @@ const MyStore = () => {
                 id="email"
               />
               <Button color="text" type="submit" disabled={updateLoading}>
-                Update details
+                {updateLoading ? (
+                  <>
+                    <Spinner size="sm" />
+                    Loading
+                  </>
+                ) : (
+                  'Update details'
+                )}
               </Button>
             </form>
           </div>
