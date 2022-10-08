@@ -5,16 +5,42 @@ import {
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import product from '../public/images/shoe.jpg'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Spinner from './ui/Spinner'
 import Router from 'next/router'
 import moment from 'moment/moment'
+import { AuthContext } from '../context/AuthContext'
+import { useMutation } from '@apollo/client'
+import { DELETE_ORDER } from '../graphql/mutations/OrderMutations'
+import toast from 'react-hot-toast'
+import { GET_USER_ORDERS } from '../graphql/queries/orderQueries'
 
 const PendingOrder = ({ order }) => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [productLoading, setProductLoading] = useState(false)
+  const { user: username } = useContext(AuthContext)
+
+  const [deleteOrder, { loading }] = useMutation(DELETE_ORDER, {
+    variables: {
+      id: order.id,
+    },
+    refetchQueries: [
+      { query: GET_USER_ORDERS, variables: { username, first: 10 } },
+    ],
+  })
+
+  const handleDelete = () => {
+    toast.loading('Deleting. . .')
+    deleteOrder()
+      .then(() => {
+        toast.success('Deleted')
+        setDeleteModal(false)
+        Router.reload()
+      })
+      .catch((err) => console.log(JSON.stringify(err, null, 2)))
+      .finally(toast.dismiss())
+  }
 
   return (
     <div className={styles.row}>
@@ -78,7 +104,9 @@ const PendingOrder = ({ order }) => {
               </p>
               <p>Confirm Delete?</p>
               <div className={styles.confirmDelete}>
-                <button>Yes</button>
+                <button onClick={handleDelete} disabled={loading}>
+                  Yes
+                </button>
                 <button onClick={() => setDeleteModal(false)}>No</button>
               </div>
             </div>

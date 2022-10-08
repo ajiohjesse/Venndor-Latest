@@ -40,3 +40,18 @@ export const PUBLISH_ORDER = gql`
     }
   }
 `
+export const DELETE_ORDER = gql`
+  mutation deleteOrder($id: ID!) {
+    updateOrder(
+      data: { order_status: "completed", message: "cancelled" }
+      where: { id: $id }
+    ) {
+      id
+      order_status
+      message
+    }
+    publishOrder(where: { id: $id }, to: PUBLISHED) {
+      id
+    }
+  }
+`
