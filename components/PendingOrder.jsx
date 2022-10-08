@@ -1,25 +1,26 @@
-import styles from "../styles/ListedProduct.module.css";
+import styles from '../styles/ListedProduct.module.css'
 import {
   faEye,
   faTrash,
   faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import product from "../public/images/shoe.jpg";
-import Image from "next/image";
-import { useState } from "react";
-import Spinner from "./ui/Spinner";
-import Router from "next/router";
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import product from '../public/images/shoe.jpg'
+import Image from 'next/image'
+import { useState } from 'react'
+import Spinner from './ui/Spinner'
+import Router from 'next/router'
+import moment from 'moment/moment'
 
-const PendingOrder = () => {
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [productLoading, setProductLoading] = useState(false);
+const PendingOrder = ({ order }) => {
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [productLoading, setProductLoading] = useState(false)
 
   return (
     <div className={styles.row}>
       <div className={styles.image}>
         <Image
-          src={product}
+          src={order.product.image.url}
           layout="fill"
           objectFit="cover"
           objectPosition="top"
@@ -27,22 +28,24 @@ const PendingOrder = () => {
         />
       </div>
       <div className={styles.orderDetails}>
-        <p className={styles.title}>Unisex Vintage shirts</p>
+        <p className={styles.title}>{order.product.name}</p>
         <div className={styles.storeName}>
           <span>Store: </span>
-          <span>Rehx Stores</span>
+          <span onClick={() => Router.push(`/store/${order.store.id}`)}>
+            {order.store.name}
+          </span>
         </div>
 
         <div className={styles.date}>
-          <p>04/10/2022</p>
+          <p>{moment(order.createdAt).format('MMM Do YYYY')}</p>
         </div>
 
         <div className={styles.buttons}>
           <button
             className={styles.view}
             onClick={() => {
-              setProductLoading(true);
-              Router.push("/product/id");
+              setProductLoading(true)
+              Router.push(`/product/${order.product.id}`)
             }}
           >
             {productLoading ? (
@@ -83,7 +86,7 @@ const PendingOrder = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PendingOrder;
+export default PendingOrder

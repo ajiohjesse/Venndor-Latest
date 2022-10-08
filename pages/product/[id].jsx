@@ -20,6 +20,7 @@ import toast from 'react-hot-toast'
 import Spinner from '../../components/ui/Spinner'
 import Modal from '../../components/ui/Modal'
 import ClientOnly from '../../components/ClientOnly'
+import { GET_USER_ORDERS } from '../../graphql/queries/orderQueries'
 
 const SingleProduct = ({ product }) => {
   const [updateLoading, setUpdateLoading] = useState(false)
