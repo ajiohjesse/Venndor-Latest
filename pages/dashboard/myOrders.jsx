@@ -3,16 +3,13 @@ import PendingOrder from '../../components/PendingOrder'
 import CompletedOrder from '../../components/CompletedOrder'
 import { useContext, useEffect, useState } from 'react'
 import Button from '../../components/ui/Button'
-import ClientOnly from '../../components/ClientOnly'
 import { AuthContext } from '../../context/AuthContext'
-import { useLazyQuery, useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import {
   GET_TOTAL_ORDERS,
   GET_USER_ORDERS,
-  GET_USER_ORDERS_COMPLETED,
 } from '../../graphql/queries/orderQueries'
 import Spinner from '../../components/ui/Spinner'
-import ModalContent from '../../components/ui/ModalContent'
 
 const MyOrders = () => {
   const [tab, setTab] = useState('pending')
@@ -87,19 +84,6 @@ const MyOrders = () => {
 
   if (error) return <p>Something Went Wrong.</p>
 
-  // if (loading || !data.orders)
-  //   return (
-  //     <div
-  //       style={{
-  //         display: 'flex',
-  //         justifyContent: 'center',
-  //         paddingTop: '4rem',
-  //       }}
-  //     >
-  //       <Spinner />
-  //     </div>
-  //   )
-
   return (
     <div className={styles.listed}>
       <h2 className={styles.pageTitle}>Orders You made:</h2>
@@ -131,6 +115,7 @@ const MyOrders = () => {
             </Button>
           </div>
         </div>
+
         {loading ? (
           <div
             style={{
@@ -283,7 +268,7 @@ const MyOrders = () => {
                           (order) => order['order_status'] === 'completed',
                         )
                         .map((order, i) => (
-                          <CompletedOrder key={i} order={order} />
+                          <CompletedOrder key={i} order={order} type="user" />
                         ))}
                     </div>
                   </div>

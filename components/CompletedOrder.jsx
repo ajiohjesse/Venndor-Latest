@@ -9,7 +9,7 @@ import Router from 'next/router'
 import moment from 'moment/moment'
 import LoadingImage from './ui/LoadingImage'
 
-const CompletedOrder = ({ order }) => {
+const CompletedOrder = ({ order, type }) => {
   const [productLoading, setProductLoading] = useState(false)
 
   return (
@@ -27,10 +27,23 @@ const CompletedOrder = ({ order }) => {
       <div className={styles.orderDetails}>
         <p className={styles.title}>{order.product.name}</p>
         <div className={styles.storeName}>
-          <span>Store: </span>
-          <span onClick={() => Router.push(`/store/${order.store.id}`)}>
-            {order.store.name}
-          </span>
+          {type === 'user' ? (
+            <>
+              <span>Store: </span>
+              <span onClick={() => Router.push(`/store/${order.store.id}`)}>
+                {order.store.name}
+              </span>
+            </>
+          ) : (
+            <>
+              <span>Client: </span>
+              <span
+                onClick={() => Router.push(`/user/${order.account.username}`)}
+              >
+                @{order.account.username}
+              </span>
+            </>
+          )}
         </div>
 
         <div className={styles.date}>

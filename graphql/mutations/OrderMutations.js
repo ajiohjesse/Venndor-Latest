@@ -55,3 +55,18 @@ export const DELETE_ORDER = gql`
     }
   }
 `
+export const DELETE_STORE_ORDER = gql`
+  mutation deleteStoreOrder($id: ID!) {
+    updateOrder(
+      data: { order_status: "completed", message: "declined" }
+      where: { id: $id }
+    ) {
+      id
+      order_status
+      message
+    }
+    publishOrder(where: { id: $id }, to: PUBLISHED) {
+      id
+    }
+  }
+`

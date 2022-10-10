@@ -36,8 +36,6 @@ const PendingOrder = ({ order, refetch, setRefetch }) => {
         setDeleteModal(false)
 
         setRefetch(refetch + 1)
-
-        // Router.reload()
       })
       .catch((err) => console.log(JSON.stringify(err, null, 2)))
       .finally(toast.dismiss())
@@ -102,7 +100,7 @@ const PendingOrder = ({ order, refetch, setRefetch }) => {
                   icon={faTriangleExclamation}
                   className={styles.warning}
                 />
-                This order will be cancelled!
+                This order will be marked as cancelled!
               </p>
               <p>Confirm Delete?</p>
               <div className={styles.confirmDelete}>

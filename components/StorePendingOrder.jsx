@@ -1,51 +1,78 @@
-import styles from "../styles/ListedProduct.module.css";
+import styles from '../styles/ListedProduct.module.css'
 import {
   faClose,
   faEdit,
   faEye,
   faTrash,
   faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import product from "../public/images/shoe.jpg";
-import Image from "next/image";
-import { useState } from "react";
-import Spinner from "./ui/Spinner";
-import Router from "next/router";
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import product from '../public/images/shoe.jpg'
+import Image from 'next/image'
+import { useState } from 'react'
+import Spinner from './ui/Spinner'
+import Router from 'next/router'
+import { useMutation } from '@apollo/client'
+import { DELETE_STORE_ORDER } from '../graphql/mutations/OrderMutations'
+import toast from 'react-hot-toast'
+import LoadingImage from './ui/LoadingImage'
+import moment from 'moment'
 
-const StorePendingOrder = () => {
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [editModal, seteditModal] = useState(false);
-  const [productLoading, setProductLoading] = useState(false);
+const StorePendingOrder = ({ order, refetch, setRefetch }) => {
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [editModal, seteditModal] = useState(false)
+  const [productLoading, setProductLoading] = useState(false)
+
+  const [deleteOrder, { loading }] = useMutation(DELETE_STORE_ORDER, {
+    variables: {
+      id: order.id,
+    },
+  })
+
+  const handleDelete = () => {
+    toast.loading('Deleting. . .')
+    deleteOrder()
+      .then(() => {
+        toast.success('Deleted')
+        setDeleteModal(false)
+
+        setRefetch(refetch + 1)
+      })
+      .catch((err) => console.log(JSON.stringify(err, null, 2)))
+      .finally(toast.dismiss())
+  }
 
   return (
     <div className={styles.row}>
       <div className={styles.image}>
         <Image
-          src={product}
+          src={order.product.image.url}
           layout="fill"
           objectFit="cover"
           objectPosition="top"
           alt="product"
         />
+        <LoadingImage />
       </div>
       <div className={styles.orderDetails}>
-        <p className={styles.title}>Unisex Vintage shirts</p>
+        <p className={styles.title}>{order.product.name}</p>
         <div className={styles.storeName}>
           <span>Client: </span>
-          <span>@rehxofficial</span>
+          <span onClick={() => Router.push(`/user/${order.account.username}`)}>
+            @{order.account.username}
+          </span>
         </div>
 
         <div className={styles.date}>
-          <p>04/10/2022</p>
+          <p>{moment(order.createdAt).format('MMM Do YYYY')}</p>
         </div>
 
         <div className={styles.buttons}>
-        <button
+          <button
             className={styles.view}
             onClick={() => {
-              setProductLoading(true);
-              Router.push("/product/id");
+              setProductLoading(true)
+              Router.push(`/product/${order.product.id}`)
             }}
           >
             {productLoading ? (
@@ -64,6 +91,7 @@ const StorePendingOrder = () => {
             <FontAwesomeIcon icon={faEdit} />
             <span className={styles.buttonTitle}>Mark as</span>
           </button>
+
           {editModal && (
             <div className={styles.deleteModal}>
               <p>Mark this order as:</p>
@@ -84,6 +112,7 @@ const StorePendingOrder = () => {
             <FontAwesomeIcon icon={faTrash} />
             <span className={styles.buttonTitle}>Delete</span>
           </button>
+
           {deleteModal && (
             <div className={styles.deleteModal}>
               <p>
@@ -91,11 +120,13 @@ const StorePendingOrder = () => {
                   icon={faTriangleExclamation}
                   className={styles.warning}
                 />
-                This order will be cancelled!
+                This order will be marked as declined!
               </p>
               <p>Confirm Delete?</p>
               <div className={styles.confirmDelete}>
-                <button>Yes</button>
+                <button onClick={handleDelete} disabled={loading}>
+                  Yes
+                </button>
                 <button onClick={() => setDeleteModal(false)}>No</button>
               </div>
             </div>
@@ -103,7 +134,7 @@ const StorePendingOrder = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default StorePendingOrder;
+export default StorePendingOrder
