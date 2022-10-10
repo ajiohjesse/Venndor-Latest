@@ -169,6 +169,7 @@ const StoreOrders = () => {
                           order={order}
                           refetch={refetch}
                           setRefetch={setRefetch}
+                          tab={tab}
                         />
                       ))}
                   </div>
@@ -218,6 +219,7 @@ const StoreOrders = () => {
                           order={order}
                           refetch={refetch}
                           setRefetch={setRefetch}
+                          tab={tab}
                         />
                       ))}
                   </div>

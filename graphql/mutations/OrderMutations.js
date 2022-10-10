@@ -70,3 +70,18 @@ export const DELETE_STORE_ORDER = gql`
     }
   }
 `
+export const UPDATE_STORE_ORDER = gql`
+  mutation updateStoreOrder($id: ID!, $status: String!, $message: String) {
+    updateOrder(
+      data: { order_status: $status, message: $message }
+      where: { id: $id }
+    ) {
+      id
+      message
+      order_status
+    }
+    publishOrder(where: { id: $id }, to: PUBLISHED) {
+      id
+    }
+  }
+`

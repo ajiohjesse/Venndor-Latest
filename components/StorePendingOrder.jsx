@@ -13,12 +13,15 @@ import { useState } from 'react'
 import Spinner from './ui/Spinner'
 import Router from 'next/router'
 import { useMutation } from '@apollo/client'
-import { DELETE_STORE_ORDER } from '../graphql/mutations/OrderMutations'
+import {
+  DELETE_STORE_ORDER,
+  UPDATE_STORE_ORDER,
+} from '../graphql/mutations/OrderMutations'
 import toast from 'react-hot-toast'
 import LoadingImage from './ui/LoadingImage'
 import moment from 'moment'
 
-const StorePendingOrder = ({ order, refetch, setRefetch }) => {
+const StorePendingOrder = ({ order, refetch, setRefetch, tab }) => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, seteditModal] = useState(false)
   const [productLoading, setProductLoading] = useState(false)
@@ -28,6 +31,10 @@ const StorePendingOrder = ({ order, refetch, setRefetch }) => {
       id: order.id,
     },
   })
+
+  const [updateOrder, { loading: updateLoading }] = useMutation(
+    UPDATE_STORE_ORDER,
+  )
 
   const handleDelete = () => {
     toast.loading('Deleting. . .')
@@ -40,6 +47,51 @@ const StorePendingOrder = ({ order, refetch, setRefetch }) => {
       })
       .catch((err) => console.log(JSON.stringify(err, null, 2)))
       .finally(toast.dismiss())
+  }
+
+  const handleEditOrder = (e) => {
+    const status = e.target.id
+
+    toast.loading('Updating. . .')
+
+    if (status !== 'delivered') {
+      updateOrder({
+        variables: {
+          id: order.id,
+          status,
+        },
+      })
+        .then(() => {
+          toast.dismiss()
+          toast.success('Updated')
+
+          seteditModal(false)
+          setRefetch(refetch + 1)
+        })
+        .catch((err) =>
+          console.log('Edit Order Error', JSON.stringify(err, null, 0)),
+        )
+        .finally()
+    } else {
+      updateOrder({
+        variables: {
+          id: order.id,
+          status: 'completed',
+          message: 'delivered',
+        },
+      })
+        .then(() => {
+          toast.dismiss()
+          toast.success('Updated')
+
+          seteditModal(false)
+          setRefetch(refetch + 1)
+        })
+        .catch((err) =>
+          console.log('Edit Order Error', JSON.stringify(err, null, 0)),
+        )
+        .finally()
+    }
   }
 
   return (
@@ -89,16 +141,42 @@ const StorePendingOrder = ({ order, refetch, setRefetch }) => {
 
           <button className={styles.edit} onClick={() => seteditModal(true)}>
             <FontAwesomeIcon icon={faEdit} />
-            <span className={styles.buttonTitle}>Mark as</span>
+            <span className={styles.buttonTitle}>Edit</span>
           </button>
 
           {editModal && (
             <div className={styles.deleteModal}>
               <p>Mark this order as:</p>
               <div className={styles.confirmEdit}>
-                <button>Pending</button>
-                <button>Processing</button>
-                <button onClick={() => seteditModal(false)}>
+                {tab !== 'pending' && (
+                  <button
+                    data-pending
+                    id="pending"
+                    onClick={handleEditOrder}
+                    disabled={updateLoading}
+                  >
+                    Pending
+                  </button>
+                )}
+                {tab !== 'processing' && (
+                  <button
+                    data-processing
+                    id="processing"
+                    onClick={handleEditOrder}
+                    disabled={updateLoading}
+                  >
+                    Processing
+                  </button>
+                )}
+                <button
+                  data-delivered
+                  id="delivered"
+                  onClick={handleEditOrder}
+                  disabled={updateLoading}
+                >
+                  Delivered
+                </button>
+                <button data-close onClick={() => seteditModal(false)}>
                   <FontAwesomeIcon icon={faClose} />
                 </button>
               </div>

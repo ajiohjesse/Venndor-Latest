@@ -36,10 +36,11 @@
   gap: 0.5rem;
   font-weight: 500;
   margin-top: 2rem;
-  background-color: var(--text);
-  padding: 0.5rem 1rem;
+  background-color: var(--primary);
+  padding: 1rem 2rem;
   border-radius: 4px;
-  color: var(--bg);
+  color: var(--white);
+  font-size: 1.2rem;
 }
 
 .row > .buttons > button {
@@ -47,19 +48,15 @@
   border: none;
 }
 
-@media (max-width: 540px) {
-  .buttons {
-    justify-content: right;
-  }
-}
-
-@media (max-width: 400px) {
+@media (max-width: 768px) {
   .buttonTitle {
     display: none;
   }
+}
 
-  .buttons > button {
-    font-size: 2rem;
+@media (max-width: 540px) {
+  .buttons {
+    justify-content: right;
   }
 }
 
@@ -87,18 +84,6 @@
   font-weight: 500;
 }
 
-/* .edit {
-  color: var(--primary);
-}
-
-.view {
-  color: var(--primary);
-}
-
-.delete {
-  color: var(--danger);
-} */
-
 .deleteGroup {
   position: relative;
 }
@@ -111,7 +96,7 @@
   background-color: var(--bg);
   z-index: 4;
   color: var(--text);
-  padding: 1rem;
+  padding: 2rem;
   font-size: 1.4rem;
   box-shadow: var(--shadow);
 }
@@ -145,16 +130,38 @@
 
 .confirmEdit {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   gap: 1rem;
 }
 
 .confirmEdit > button {
-  background-color: var(--text);
+  background-color: var(--primary);
   color: var(--white);
   padding: 4px 8px;
   border-radius: 4px;
   box-shadow: var(--shadow);
+  transition: all 150ms ease;
+}
+
+.confirmEdit > button:hover {
+  opacity: 0.6;
+}
+.confirmEdit > button:active {
+  transform: scale(0.9);
+}
+.confirmEdit > button:disabled {
+  opacity: 0.6;
+}
+
+.confirmEdit > button[data-pending] {
+  background-color: var(--warning);
+}
+.confirmEdit > button[data-processing] {
+  background-color: var(--violet);
+}
+.confirmEdit > button[data-delivered] {
+  background-color: var(--success);
 }
 
 .orderStatus {
