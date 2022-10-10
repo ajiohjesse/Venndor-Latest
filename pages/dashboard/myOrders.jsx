@@ -18,6 +18,12 @@ const MyOrders = () => {
   const [tab, setTab] = useState('pending')
   const [data, setData] = useState([])
 
+  /**
+   * The below state is a hack for refrshing
+   * the queries each time an order is deleted.
+   */
+  const [refetch, setRefetch] = useState(1)
+
   const [pageSize, setPageSize] = useState('')
   const [totalPages, setTotalPages] = useState('')
 
@@ -60,7 +66,7 @@ const MyOrders = () => {
     }
 
     get()
-  }, [currentPage, tab])
+  }, [currentPage, tab, refetch])
 
   const handleClick = (e) => {
     setTab(e.target.id)
@@ -80,18 +86,19 @@ const MyOrders = () => {
   }
 
   if (error) return <p>Something Went Wrong.</p>
-  if (loading || !data.orders)
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          paddingTop: '4rem',
-        }}
-      >
-        <Spinner />
-      </div>
-    )
+
+  // if (loading || !data.orders)
+  //   return (
+  //     <div
+  //       style={{
+  //         display: 'flex',
+  //         justifyContent: 'center',
+  //         paddingTop: '4rem',
+  //       }}
+  //     >
+  //       <Spinner />
+  //     </div>
+  //   )
 
   return (
     <div className={styles.listed}>
@@ -124,131 +131,166 @@ const MyOrders = () => {
             </Button>
           </div>
         </div>
-
-        {tab === 'pending' && (
-          <div className={styles.wrapper}>
-            <div className={styles.heading}>
-              <h2>
-                <span
-                  className={styles.colorIcon}
-                  data-name="pendingOrders"
-                ></span>
-                Pending Orders: <span>{pageSize}</span>
-              </h2>
-            </div>
-            <div className={styles.container}>
-              <div className={styles.pagination}>
-                <span className={styles.pageCount}>
-                  Page: {currentPage} / {totalPages}
-                </span>
-                <div className={styles.paginationBtns}>
-                  <button
-                    onClick={() => paginate('prev')}
-                    disabled={currentPage === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    onClick={() => paginate('next')}
-                    disabled={currentPage === totalPages || totalPages === 0}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-              <div className={styles.column}>
-                {data.orders
-                  .filter((order) => order['order_status'] === 'pending')
-                  .map((order, i) => (
-                    <PendingOrder key={i} order={order} />
-                  ))}
-              </div>
-            </div>
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              paddingTop: '4rem',
+            }}
+          >
+            <Spinner />
           </div>
-        )}
-
-        {tab === 'processing' && (
-          <div className={styles.wrapper}>
-            <div className={styles.heading}>
-              <h2>
-                <span
-                  className={styles.colorIcon}
-                  data-name="processingOrders"
-                ></span>
-                Processing Orders: <span>{pageSize}</span>
-              </h2>
-            </div>
-            <div className={styles.container}>
-              <div className={styles.pagination}>
-                <span className={styles.pageCount}>
-                  Page: {currentPage} / {totalPages}
-                </span>
-                <div className={styles.paginationBtns}>
-                  <button
-                    onClick={() => paginate('prev')}
-                    disabled={currentPage === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    onClick={() => paginate('next')}
-                    disabled={currentPage === totalPages || totalPages === 0}
-                  >
-                    Next
-                  </button>
+        ) : (
+          data.orders && (
+            <>
+              {tab === 'pending' && (
+                <div className={styles.wrapper}>
+                  <div className={styles.heading}>
+                    <h2>
+                      <span
+                        className={styles.colorIcon}
+                        data-name="pendingOrders"
+                      ></span>
+                      Pending Orders: <span>{pageSize}</span>
+                    </h2>
+                  </div>
+                  <div className={styles.container}>
+                    <div className={styles.pagination}>
+                      <span className={styles.pageCount}>
+                        Page: {currentPage} / {totalPages}
+                      </span>
+                      <div className={styles.paginationBtns}>
+                        <button
+                          onClick={() => paginate('prev')}
+                          disabled={currentPage === 1}
+                        >
+                          Prev
+                        </button>
+                        <button
+                          onClick={() => paginate('next')}
+                          disabled={
+                            currentPage === totalPages || totalPages === 0
+                          }
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                    <div className={styles.column}>
+                      {data.orders
+                        .filter((order) => order['order_status'] === 'pending')
+                        .map((order, i) => (
+                          <PendingOrder
+                            key={i}
+                            order={order}
+                            refetch={refetch}
+                            setRefetch={setRefetch}
+                          />
+                        ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className={styles.column}>
-                {data.orders
-                  .filter((order) => order['order_status'] === 'processing')
-                  .map((order, i) => (
-                    <PendingOrder key={i} order={order} />
-                  ))}
-              </div>
-            </div>
-          </div>
-        )}
+              )}
 
-        {tab === 'completed' && (
-          <div className={styles.wrapper}>
-            <div className={styles.heading}>
-              <h2>
-                <span
-                  className={styles.colorIcon}
-                  data-name="completedOrders"
-                ></span>
-                Completed Orders: <span>{pageSize}</span>
-              </h2>
-            </div>
-            <div className={styles.container}>
-              <div className={styles.pagination}>
-                <span className={styles.pageCount}>
-                  Page: {currentPage} / {totalPages}
-                </span>
-                <div className={styles.paginationBtns}>
-                  <button
-                    onClick={() => paginate('prev')}
-                    disabled={currentPage === 1}
-                  >
-                    Prev
-                  </button>
-                  <button
-                    onClick={() => paginate('next')}
-                    disabled={currentPage === totalPages || totalPages === 0}
-                  >
-                    Next
-                  </button>
+              {tab === 'processing' && (
+                <div className={styles.wrapper}>
+                  <div className={styles.heading}>
+                    <h2>
+                      <span
+                        className={styles.colorIcon}
+                        data-name="processingOrders"
+                      ></span>
+                      Processing Orders: <span>{pageSize}</span>
+                    </h2>
+                  </div>
+                  <div className={styles.container}>
+                    <div className={styles.pagination}>
+                      <span className={styles.pageCount}>
+                        Page: {currentPage} / {totalPages}
+                      </span>
+                      <div className={styles.paginationBtns}>
+                        <button
+                          onClick={() => paginate('prev')}
+                          disabled={currentPage === 1}
+                        >
+                          Prev
+                        </button>
+                        <button
+                          onClick={() => paginate('next')}
+                          disabled={
+                            currentPage === totalPages || totalPages === 0
+                          }
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                    <div className={styles.column}>
+                      {data.orders
+                        .filter(
+                          (order) => order['order_status'] === 'processing',
+                        )
+                        .map((order, i) => (
+                          <PendingOrder
+                            key={i}
+                            order={order}
+                            refetch={refetch}
+                            setRefetch={setRefetch}
+                          />
+                        ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className={styles.column}>
-                {data.orders
-                  .filter((order) => order['order_status'] === 'completed')
-                  .map((order, i) => (
-                    <CompletedOrder key={i} order={order} />
-                  ))}
-              </div>
-            </div>
-          </div>
+              )}
+
+              {tab === 'completed' && (
+                <div className={styles.wrapper}>
+                  <div className={styles.heading}>
+                    <h2>
+                      <span
+                        className={styles.colorIcon}
+                        data-name="completedOrders"
+                      ></span>
+                      Completed Orders: <span>{pageSize}</span>
+                    </h2>
+                  </div>
+                  <div className={styles.container}>
+                    <div className={styles.pagination}>
+                      <span className={styles.pageCount}>
+                        Page: {currentPage} / {totalPages}
+                      </span>
+                      <div className={styles.paginationBtns}>
+                        <button
+                          onClick={() => paginate('prev')}
+                          disabled={currentPage === 1}
+                        >
+                          Prev
+                        </button>
+                        <button
+                          onClick={() => paginate('next')}
+                          disabled={
+                            currentPage === totalPages || totalPages === 0
+                          }
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                    <div className={styles.column}>
+                      {data.orders
+                        .filter(
+                          (order) => order['order_status'] === 'completed',
+                        )
+                        .map((order, i) => (
+                          <CompletedOrder key={i} order={order} />
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )
         )}
       </>
     </div>

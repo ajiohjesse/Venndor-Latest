@@ -15,6 +15,10 @@
   /* aspect-ratio: 1/1; */
 }
 
+.image > span {
+  z-index: 1;
+}
+
 .orderDetails {
   width: 100%;
   height: 100%;

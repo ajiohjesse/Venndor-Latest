@@ -7,6 +7,7 @@ import Spinner from './ui/Spinner'
 import { useState } from 'react'
 import Router from 'next/router'
 import moment from 'moment/moment'
+import LoadingImage from './ui/LoadingImage'
 
 const CompletedOrder = ({ order }) => {
   const [productLoading, setProductLoading] = useState(false)
@@ -21,6 +22,7 @@ const CompletedOrder = ({ order }) => {
           objectPosition="top"
           alt="product"
         />
+        <LoadingImage />
       </div>
       <div className={styles.orderDetails}>
         <p className={styles.title}>{order.product.name}</p>

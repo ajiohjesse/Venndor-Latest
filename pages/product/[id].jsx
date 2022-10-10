@@ -37,6 +37,7 @@ const SingleProduct = ({ product }) => {
       username,
       productId: product.id,
     },
+    fetchPolicy: 'network-only',
   })
 
   const [createOrder] = useMutation(CREATE_ORDER, {

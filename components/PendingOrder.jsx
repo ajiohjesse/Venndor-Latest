@@ -15,8 +15,9 @@ import { useMutation } from '@apollo/client'
 import { DELETE_ORDER } from '../graphql/mutations/OrderMutations'
 import toast from 'react-hot-toast'
 import { GET_USER_ORDERS } from '../graphql/queries/orderQueries'
+import LoadingImage from './ui/LoadingImage'
 
-const PendingOrder = ({ order }) => {
+const PendingOrder = ({ order, refetch, setRefetch }) => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [productLoading, setProductLoading] = useState(false)
   const { user: username } = useContext(AuthContext)
@@ -25,9 +26,6 @@ const PendingOrder = ({ order }) => {
     variables: {
       id: order.id,
     },
-    refetchQueries: [
-      { query: GET_USER_ORDERS, variables: { username, first: 10 } },
-    ],
   })
 
   const handleDelete = () => {
@@ -36,7 +34,10 @@ const PendingOrder = ({ order }) => {
       .then(() => {
         toast.success('Deleted')
         setDeleteModal(false)
-        Router.reload()
+
+        setRefetch(refetch + 1)
+
+        // Router.reload()
       })
       .catch((err) => console.log(JSON.stringify(err, null, 2)))
       .finally(toast.dismiss())
@@ -52,6 +53,7 @@ const PendingOrder = ({ order }) => {
           objectPosition="top"
           alt="product"
         />
+        <LoadingImage />
       </div>
       <div className={styles.orderDetails}>
         <p className={styles.title}>{order.product.name}</p>
