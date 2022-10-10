@@ -33,8 +33,10 @@ export const GET_USER_ORDERS = gql`
 `
 
 export const GET_TOTAL_ORDERS = gql`
-  query getTotalOrders($username: String!) {
-    ordersConnection(where: { account: { username: $username } }) {
+  query getTotalOrders($username: String!, $status: String!) {
+    ordersConnection(
+      where: { account: { username: $username }, order_status: $status }
+    ) {
       aggregate {
         count
       }
