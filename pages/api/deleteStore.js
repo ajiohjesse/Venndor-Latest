@@ -1,10 +1,12 @@
 import client from '../../apollo-client'
 import {
-  DELETE_ALL_STORE_PRODUCTS,
   DELETE_ALL_STORE_PRODUCT_IMAGES,
   DELETE_ASSET,
 } from '../../graphql/mutations/AssetMutations'
-import { DELETE_STORE } from '../../graphql/mutations/storeMutations'
+import {
+  DELETE_ALL_STORE_PRODUCTS,
+  DELETE_STORE,
+} from '../../graphql/mutations/storeMutations'
 
 export default async function handler(req, res) {
   const { storeId, imageId } = req.body

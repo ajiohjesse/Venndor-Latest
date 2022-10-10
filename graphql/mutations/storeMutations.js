@@ -95,3 +95,13 @@ export const DELETE_STORE = gql`
     }
   }
 `
+export const DELETE_ALL_STORE_PRODUCTS = gql`
+  mutation deleteAllStoreProducts($storeId: ID!) {
+    deleteManyProducts(where: { store: { id: $storeId } }) {
+      count
+    }
+    deleteManyOrders(where: { store: { id: $storeId } }) {
+      count
+    }
+  }
+`

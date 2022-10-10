@@ -19,13 +19,12 @@ import toast from 'react-hot-toast'
 import Spinner from '../../components/ui/Spinner'
 import Modal from '../../components/ui/Modal'
 import ClientOnly from '../../components/ClientOnly'
-import {
-  GET_USER_ORDERS,
-  VERIFY_ORDER,
-} from '../../graphql/queries/orderQueries'
-import MyOrders from '../dashboard/myOrders'
+import { VERIFY_ORDER } from '../../graphql/queries/orderQueries'
+import PageNotFound from '../../components/PageNotFound'
 
 const SingleProduct = ({ product }) => {
+  if (!product) return <PageNotFound />
+
   const [updateLoading, setUpdateLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [hasPendingOrder, setHasPendingOrder] = useState(false)
@@ -246,10 +245,20 @@ export default SingleProduct
 export const getServerSideProps = async ({ params }) => {
   const id = params.id
 
-  const { data } = await client.query({
-    query: GET_PRODUCT,
-    variables: { id },
-  })
+  const { data } = await client
+    .query({
+      query: GET_PRODUCT,
+      variables: { id },
+    })
+    .catch((err) => {
+      console.log('Fetch Product Error:', JSON.stringify(err, null, 2))
+
+      return {
+        props: {
+          product: null,
+        },
+      }
+    })
 
   return {
     props: {

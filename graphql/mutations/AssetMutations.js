@@ -53,10 +53,3 @@ export const DELETE_ALL_STORE_PRODUCT_IMAGES = gql`
     }
   }
 `
-export const DELETE_ALL_STORE_PRODUCTS = gql`
-  mutation deleteAllStoreProducts($storeId: ID!) {
-    deleteManyProducts(where: { store: { id: $storeId } }) {
-      count
-    }
-  }
-`

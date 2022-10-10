@@ -21,6 +21,7 @@ export const GET_USER_ORDERS = gql`
         id
         name
         image {
+          id
           url
         }
       }
@@ -81,6 +82,7 @@ export const GET_STORE_ORDERS = gql`
         id
         name
         image {
+          id
           url
         }
       }

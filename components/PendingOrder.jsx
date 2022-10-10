@@ -45,7 +45,7 @@ const PendingOrder = ({ order, refetch, setRefetch }) => {
     <div className={styles.row}>
       <div className={styles.image}>
         <Image
-          src={order.product.image.url}
+          src={order.product?.image.url}
           layout="fill"
           objectFit="cover"
           objectPosition="top"
@@ -54,7 +54,7 @@ const PendingOrder = ({ order, refetch, setRefetch }) => {
         <LoadingImage />
       </div>
       <div className={styles.orderDetails}>
-        <p className={styles.title}>{order.product.name}</p>
+        <p className={styles.title}>{order.product?.name}</p>
         <div className={styles.storeName}>
           <span>Store: </span>
           <span onClick={() => Router.push(`/store/${order.store.id}`)}>
@@ -71,7 +71,7 @@ const PendingOrder = ({ order, refetch, setRefetch }) => {
             className={styles.view}
             onClick={() => {
               setProductLoading(true)
-              Router.push(`/product/${order.product.id}`)
+              Router.push(`/product/${order.product?.id}`)
             }}
           >
             {productLoading ? (

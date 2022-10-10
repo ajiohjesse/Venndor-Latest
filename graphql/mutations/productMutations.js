@@ -38,3 +38,22 @@ export const PUBLISH_PRODUCT = gql`
     }
   }
 `
+export const DELETE_PRODUCT = gql`
+  mutation deleteProduct($productId: ID!, $storeId: ID!, $imageId: ID!) {
+    deleteManyOrders(where: { product: { id: $productId } }) {
+      count
+    }
+
+    deleteAsset(where: { id: $imageId }) {
+      id
+    }
+
+    deleteProduct(where: { id: $productId }) {
+      id
+    }
+
+    publishStore(where: { id: $storeId }, to: PUBLISHED) {
+      id
+    }
+  }
+`

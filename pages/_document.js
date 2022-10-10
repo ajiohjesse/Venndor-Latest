@@ -22,7 +22,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="shortcut icon" href="/favicon.svg" type="image/svg" />
+          <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
         </Head>
         <body>
           <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />

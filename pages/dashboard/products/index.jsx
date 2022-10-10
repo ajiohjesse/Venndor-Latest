@@ -22,6 +22,16 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [productsPerPage] = useState(6)
 
+  /**
+   * the following state is for triggering
+   * a refetch of the products and the boolean
+   * value doesnt really matter.
+   */
+  const [shouldRefetch, setShouldRefetch] = useState(true)
+  const refetch = () => {
+    setShouldRefetch(!shouldRefetch)
+  }
+
   const { user: username } = useContext(AuthContext)
 
   const [getUser] = useLazyQuery(GET_CURRENT_USER, {
@@ -67,7 +77,7 @@ const Products = () => {
     }
 
     get()
-  }, [currentPage])
+  }, [currentPage, shouldRefetch])
 
   const paginate = (type) => {
     if (type === 'next') {
@@ -137,7 +147,11 @@ const Products = () => {
                     .fill(null)
                     .map((_, i) => <SkeletonCard key={i} />)
                 : products.map((product, i) => (
-                    <ListedProduct key={i} product={product} />
+                    <ListedProduct
+                      key={i}
+                      product={product}
+                      refetch={refetch}
+                    />
                   ))}
             </div>
             {!loading && products && (

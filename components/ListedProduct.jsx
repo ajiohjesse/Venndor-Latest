@@ -9,10 +9,37 @@ import Image from 'next/image'
 import { useState } from 'react'
 import Spinner from './ui/Spinner'
 import Router from 'next/router'
+import { DELETE_PRODUCT } from '../graphql/mutations/productMutations'
+import { useMutation } from '@apollo/client'
+import toast from 'react-hot-toast'
 
-const ListedProduct = ({ product }) => {
+const ListedProduct = ({ product, refetch }) => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [productLoading, setProductLoading] = useState(false)
+
+  const [deleteProduct, { loading }] = useMutation(DELETE_PRODUCT, {
+    variables: {
+      productId: product.id,
+      storeId: product.store.id,
+      imageId: product.image.id,
+    },
+  })
+
+  const handleDeleteProduct = async () => {
+    const loadingToast = toast.loading('Deleting. . .')
+
+    await deleteProduct()
+      .then(() => {
+        toast.remove(loadingToast)
+        toast.success('Deleted.')
+
+        refetch()
+      })
+      .catch((err) => {
+        toast.dismiss()
+        console.log('Delete Product Error:', JSON.stringify(err, null, 2))
+      })
+  }
 
   return (
     <div className={styles.row}>
@@ -77,7 +104,9 @@ const ListedProduct = ({ product }) => {
               </p>
               <p>Confirm Delete?</p>
               <div className={styles.confirmDelete}>
-                <button>Yes</button>
+                <button onClick={handleDeleteProduct} disabled={loading}>
+                  Yes
+                </button>
                 <button onClick={() => setDeleteModal(false)}>No</button>
               </div>
             </div>
