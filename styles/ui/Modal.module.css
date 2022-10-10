@@ -11,3 +11,13 @@
   place-content: center;
   backdrop-filter: blur(5px);
 }
+
+.modalContentWrapper {
+  width: 90%;
+  margin-inline: auto;
+  background-color: var(--bg);
+  color: var(--text);
+  padding: 2rem;
+  box-shadow: var(--shadow-color);
+}
+

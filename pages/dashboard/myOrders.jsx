@@ -12,6 +12,7 @@ import {
   GET_USER_ORDERS_COMPLETED,
 } from '../../graphql/queries/orderQueries'
 import Spinner from '../../components/ui/Spinner'
+import ModalContent from '../../components/ui/ModalContent'
 
 const MyOrders = () => {
   const [tab, setTab] = useState('pending')
@@ -48,6 +49,7 @@ const MyOrders = () => {
       //get page size
       await getPageSize({
         variables: { username, status: tab },
+        fetchPolicy: 'network-only',
       }).then(({ data }) => {
         setPageSize(data.ordersConnection.aggregate.count)
 
@@ -240,9 +242,7 @@ const MyOrders = () => {
               </div>
               <div className={styles.column}>
                 {data.orders
-                  .filter((order) => (order) =>
-                    order['order_status'] === 'completed',
-                  )
+                  .filter((order) => order['order_status'] === 'completed')
                   .map((order, i) => (
                     <CompletedOrder key={i} order={order} />
                   ))}

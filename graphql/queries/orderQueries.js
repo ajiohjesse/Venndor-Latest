@@ -43,3 +43,16 @@ export const GET_TOTAL_ORDERS = gql`
     }
   }
 `
+export const VERIFY_ORDER = gql`
+  query verifyOrder($username: String!, $productId: ID!) {
+    orders(
+      where: {
+        account: { username: $username }
+        AND: { product: { id: $productId } }
+      }
+    ) {
+      id
+      order_status
+    }
+  }
+`

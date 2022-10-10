@@ -1,5 +1,4 @@
 import styles from '../../styles/pageStyles/Product.module.css'
-import shoe from '../../public/images/shoe.jpg'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
@@ -9,7 +8,7 @@ import client from '../../apollo-client'
 import { GET_PRODUCT } from '../../graphql/queries/productQueries'
 import Router from 'next/router'
 import moment from 'moment/moment'
-import { useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import {
   CREATE_ORDER,
   PUBLISH_ORDER,
@@ -20,13 +19,25 @@ import toast from 'react-hot-toast'
 import Spinner from '../../components/ui/Spinner'
 import Modal from '../../components/ui/Modal'
 import ClientOnly from '../../components/ClientOnly'
-import { GET_USER_ORDERS } from '../../graphql/queries/orderQueries'
+import {
+  GET_USER_ORDERS,
+  VERIFY_ORDER,
+} from '../../graphql/queries/orderQueries'
+import MyOrders from '../dashboard/myOrders'
 
 const SingleProduct = ({ product }) => {
   const [updateLoading, setUpdateLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
+  const [hasPendingOrder, setHasPendingOrder] = useState(false)
 
   const { user: username } = useContext(AuthContext)
+
+  const [verifyOrder] = useLazyQuery(VERIFY_ORDER, {
+    variables: {
+      username,
+      productId: product.id,
+    },
+  })
 
   const [createOrder] = useMutation(CREATE_ORDER, {
     variables: {
@@ -40,6 +51,24 @@ const SingleProduct = ({ product }) => {
 
   const handleOrder = async () => {
     setUpdateLoading(true)
+
+    let duplicateRequest = false
+
+    await verifyOrder().then(({ data }) => {
+      data.orders.some((order) => {
+        if (order['order_status'] !== 'completed') {
+          duplicateRequest = true
+
+          setUpdateLoading(false)
+
+          setHasPendingOrder(true)
+        }
+      })
+    })
+
+    if (duplicateRequest) {
+      return null
+    }
 
     await createOrder()
       .then(async ({ data }) => {
@@ -143,6 +172,36 @@ const SingleProduct = ({ product }) => {
                         Track
                       </button>
                       <button type="button" onClick={() => setModalOpen(false)}>
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Modal>
+            )}
+
+            {hasPendingOrder && (
+              <Modal>
+                <div className={styles.modalContentWrapper}>
+                  <div className={styles.modalContent}>
+                    <p>
+                      You already have an open request for this product.
+                      <br />
+                      <br />
+                      You can track your orders by clicking the track button
+                      below.
+                    </p>
+                    <div className={styles.modalButtons}>
+                      <button
+                        type="button"
+                        onClick={() => Router.push('/dashboard/myOrders')}
+                      >
+                        Track
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHasPendingOrder(false)}
+                      >
                         Close
                       </button>
                     </div>
