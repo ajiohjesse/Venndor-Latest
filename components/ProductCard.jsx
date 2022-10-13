@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
         />
       </div>
       <div className={styles.orderDetails}>
-        <p className={styles.title}>{product.name}</p>
+        <p className={styles.title}>{product?.name}</p>
         <div className={styles.storeName}>
           <span>Price: </span>
           <span className={styles.price}>
