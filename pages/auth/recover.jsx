@@ -17,7 +17,7 @@ const Recover = () => {
           <FontAwesomeIcon icon={faLightbulb} className={styles.infoIcon} />
           Your current password will be sent to your registered email address.
           If you no longer have access to your email,{" "}
-          <Link href="/contact">contact</Link> us and we'll help you recover
+          <Link href="/contact">contact</Link> us and we&#39ll help you recover
           your account.
         </p>
         {resetError && <p className={styles.error}>{resetError}</p>}

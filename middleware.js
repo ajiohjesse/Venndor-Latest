@@ -51,7 +51,7 @@ export default async function middleware(req) {
         fetchPolicy: 'network-only',
       })
       .then(({ data }) => {
-        if (!data.account.store) {
+        if (!data.account.store.id) {
           return NextResponse.rewrite(
             new URL('/dashboard/createStore', req.nextUrl),
           )
@@ -79,7 +79,7 @@ export default async function middleware(req) {
         fetchPolicy: 'network-only',
       })
       .then(({ data }) => {
-        if (data?.account.store) {
+        if (data?.account.store.id) {
           return NextResponse.rewrite(
             new URL('/dashboard/myStore', req.nextUrl),
           )

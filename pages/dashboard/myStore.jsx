@@ -263,7 +263,7 @@ const MyStore = () => {
 
           <div className={styles.orders}>
             <h2 className={styles.heading}>Listed Products</h2>
-            <h4>Add new products and view products you've listed:</h4>
+            <h4>Add new products and view products you&#39ve listed:</h4>
             <Button
               disabled={productsLoading}
               onClick={() => {
