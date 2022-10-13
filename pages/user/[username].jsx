@@ -111,7 +111,7 @@ const User = ({ user }) => {
                       Facebook:
                     </td>
                     <td>
-                      <a href={user.facebook} target="_blank">
+                      <a href={user.facebook} target="_blank" rel="noreferrer">
                         {user.facebook}
                       </a>
                     </td>
@@ -124,7 +124,7 @@ const User = ({ user }) => {
                       Instagram:
                     </td>
                     <td>
-                      <a href={user.instagram} target="_blank">
+                      <a href={user.instagram} target="_blank" rel="noreferrer">
                         {user.instagram}
                       </a>
                     </td>
@@ -137,7 +137,7 @@ const User = ({ user }) => {
                       Twitter:
                     </td>
                     <td>
-                      <a href={user.twitter} target="_blank">
+                      <a href={user.twitter} target="_blank" rel="noreferrer">
                         {user.twitter}
                       </a>
                     </td>

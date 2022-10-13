@@ -1,3 +1,5 @@
+// eslint-disable-next-line react/display-name
+
 import { forwardRef } from 'react'
 import styles from '../../styles/ui/Button.module.css'
 
@@ -12,5 +14,7 @@ const Button = forwardRef(({ children, color = 'primary', ...others }, ref) => {
     </button>
   )
 })
+
+Button.displayName = 'Button'
 
 export default Button

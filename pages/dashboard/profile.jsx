@@ -273,7 +273,7 @@ const UserProfile = () => {
                       Facebook:
                     </td>
                     <td>
-                      <a href={user?.facebook} target="_blank">
+                      <a href={user?.facebook} target="_blank" rel="noreferrer">
                         {user?.facebook}
                       </a>
                     </td>
@@ -286,7 +286,7 @@ const UserProfile = () => {
                       Instagram:
                     </td>
                     <td>
-                      <a href={user?.instagram} target="_blank">
+                      <a href={user?.instagram} target="_blank" rel="noreferrer">
                         {user?.instagram}
                       </a>
                     </td>
@@ -299,7 +299,7 @@ const UserProfile = () => {
                       Twitter:
                     </td>
                     <td>
-                      <a href={user?.twitter} target="_blank">
+                      <a href={user?.twitter} target="_blank" rel="noreferrer">
                         {user?.twitter}
                       </a>
                     </td>
@@ -368,7 +368,7 @@ const UserProfile = () => {
 
           <div className={styles.orders}>
             <h2 className={styles.heading}>My Orders</h2>
-            <h4>Track Orders you've made:</h4>
+            <h4>Track Orders you&#39ve made:</h4>
             <Button
               color="text"
               disabled={trackLoading}
