@@ -93,6 +93,7 @@ const PendingOrder = ({ order, refetch, setRefetch }) => {
             <FontAwesomeIcon icon={faTrash} />
             <span className={styles.buttonTitle}>Delete</span>
           </button>
+
           {deleteModal && (
             <div className={styles.deleteModal}>
               <p>
