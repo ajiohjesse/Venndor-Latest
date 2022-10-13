@@ -8,6 +8,8 @@ import client from '../apollo-client'
 import { AuthContextProvider } from '../context/AuthContext'
 import NextProgress from 'next-progress'
 
+var __DEV__ = false
+
 function MyApp({ Component, pageProps }) {
   return (
     <>
