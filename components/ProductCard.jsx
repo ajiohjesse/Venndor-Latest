@@ -15,11 +15,11 @@ const ProductCard = ({ product }) => {
     <div className={styles.row}>
       <div className={styles.image}>
         <Image
-          src={product.image.url}
+          src={product?.image.url}
           layout="fill"
           objectFit="cover"
           objectPosition="top"
-          alt={product.name}
+          alt={product?.name}
         />
       </div>
       <div className={styles.orderDetails}>
@@ -27,7 +27,7 @@ const ProductCard = ({ product }) => {
         <div className={styles.storeName}>
           <span>Price: </span>
           <span className={styles.price}>
-            &#8358; {product.price.toLocaleString('en-Us')}
+            &#8358; {product?.price.toLocaleString('en-Us')}
           </span>
         </div>
 
@@ -35,9 +35,9 @@ const ProductCard = ({ product }) => {
           <span>Categroy: </span>
           <span
             className={styles.category}
-            onClick={() => Router.push(`/category/${product.category}`)}
+            onClick={() => Router.push(`/category/${product?.category}`)}
           >
-            {product.category}
+            {product?.category}
           </span>
         </div>
 
@@ -45,7 +45,7 @@ const ProductCard = ({ product }) => {
           <span>Store: </span>
           <span
             className={styles.category}
-            onClick={() => Router.push(`/store/${product.store.id}`)}
+            onClick={() => Router.push(`/store/${product?.store.id}`)}
           >
             {product.store.name}
           </span>
@@ -54,8 +54,8 @@ const ProductCard = ({ product }) => {
         <div className={styles.storeName}>
           <span>Location: </span>
           <span className={styles.category}>
-            {product.store.state}{' '}
-            {product.store.district && `/ ${product.store.district}`}
+            {product?.store.state}{' '}
+            {product?.store.district && `/ ${product?.store.district}`}
           </span>
         </div>
 
@@ -64,7 +64,7 @@ const ProductCard = ({ product }) => {
             className={styles.view}
             onClick={() => {
               setProductLoading(true)
-              Router.push(`/product/${product.id}`)
+              Router.push(`/product/${product?.id}`)
             }}
           >
             {productLoading ? (
