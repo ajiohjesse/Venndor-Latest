@@ -47,7 +47,7 @@ const ProductCard = ({ product }) => {
             className={styles.category}
             onClick={() => Router.push(`/store/${product?.store.id}`)}
           >
-            {product.store.name}
+            {product?.store.name}
           </span>
         </div>
 
