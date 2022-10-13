@@ -23,8 +23,6 @@ import { VERIFY_ORDER } from '../../graphql/queries/orderQueries'
 import PageNotFound from '../../components/PageNotFound'
 
 const SingleProduct = ({ product }) => {
-  if (!product) return <PageNotFound />
-
   const [updateLoading, setUpdateLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [hasPendingOrder, setHasPendingOrder] = useState(false)
@@ -83,6 +81,8 @@ const SingleProduct = ({ product }) => {
       })
       .finally(setUpdateLoading(false))
   }
+
+  if (!product) return <PageNotFound />
 
   return (
     <div className={styles.wrapper}>
