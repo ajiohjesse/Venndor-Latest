@@ -30,6 +30,9 @@ export const CREATE_ORDER = gql`
     publishProduct(where: { id: $productId }, to: PUBLISHED) {
       id
     }
+    publishStore(where: { id: $storeId }, to: PUBLISHED) {
+      id
+    }
   }
 `
 
