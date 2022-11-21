@@ -10,6 +10,7 @@ const nextConfig = {
     return config
   },
   env: {
+    JWT: 'RKjcSEt9YOvju5sDzUPk5j3TC4MziLZ3',
     ENDPOINT:
       'https://api-eu-west-2.hygraph.com/v2/cl7gb25bu7lwl01ufcl76h703/master',
     GRAPH_CMS_TOKEN:

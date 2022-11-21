@@ -73,7 +73,7 @@ const Login = () => {
           </Button>
         </form>
         <p className={styles.link}>
-          Don&#39t have an account? <Link href="/auth/register">Register</Link>
+          Don&#39;t have an account? <Link href="/auth/register">Register</Link>
         </p>
         <p className={styles.link}>
           Forgot your password?{' '}
