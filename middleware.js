@@ -4,6 +4,9 @@ import client from './apollo-client'
 import { GET_CURRENT_USER } from './graphql/queries/userQueries'
 
 export default async function middleware(req) {
+  return NextResponse.redirect(new URL('/auth/login', req.nextUrl))
+  
+
   // const token = req.cookies.get('VenndorUser')
   // const url = req.url
   // let isLoggedIn
