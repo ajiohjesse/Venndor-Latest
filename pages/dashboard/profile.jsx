@@ -286,7 +286,11 @@ const UserProfile = () => {
                       Instagram:
                     </td>
                     <td>
-                      <a href={user?.instagram} target="_blank" rel="noreferrer">
+                      <a
+                        href={user?.instagram}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         {user?.instagram}
                       </a>
                     </td>
@@ -368,7 +372,7 @@ const UserProfile = () => {
 
           <div className={styles.orders}>
             <h2 className={styles.heading}>My Orders</h2>
-            <h4>Track Orders you&#39ve made:</h4>
+            <h4>Track Orders you&#39;ve made:</h4>
             <Button
               color="text"
               disabled={trackLoading}
