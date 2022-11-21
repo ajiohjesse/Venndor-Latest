@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import * as jose from 'jose'
-import client from './apollo-client'
-import { GET_CURRENT_USER } from './graphql/queries/userQueries'
+import client from '../apollo-client'
+import { GET_CURRENT_USER } from '../graphql/queries/userQueries'
 
 export default async function middleware(req) {
   const token = req.cookies.get('VenndorUser')
