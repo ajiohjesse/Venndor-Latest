@@ -29,13 +29,8 @@ const cache = new InMemoryCache({
 })
 
 const client = new ApolloClient({
-  link: process.env.ENDPOINT,
-  headers: {
-    authorization: process.env.GRAPH_CMS_TOKEN,
-  },
+  link: authLink.concat(httpLink),
   cache: cache,
 })
 
 export default client
-
-// authLink.concat(httpLink)
