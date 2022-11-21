@@ -41,92 +41,59 @@ export default async function middleware(req) {
    * Dont access store page if user
    * hasnt created a store.
    */
-  if (url.includes('/dashboard/myStore')) {
-    const { data, error } = await client.query({
-      query: GET_CURRENT_USER,
-      variables: {
-        username,
-      },
-      fetchPolicy: 'network-only',
-    })
 
-    if (data.account.store === null) {
-      return NextResponse.redirect(
-        new URL('/dashboard/createStore', req.nextUrl),
-      )
-    }
+  // if (url.includes('/dashboard/myStore')) {
+  //   const { data, error } = await client.query({
+  //     query: GET_CURRENT_USER,
+  //     variables: {
+  //       username,
+  //     },
+  //     fetchPolicy: 'network-only',
+  //   })
 
-    if (error) {
-      console.log({
-        name: 'Error in middleware',
-        description: 'Happened while trying to validate myStore route',
-        error: error,
-      })
+  //   if (data.account.store === null) {
+  //     return NextResponse.redirect(
+  //       new URL('/dashboard/createStore', req.nextUrl),
+  //     )
+  //   }
 
-      return NextResponse.redirect(new URL('/', req.nextUrl))
-    }
-  }
+  //   if (error) {
+  //     console.log({
+  //       name: 'Error in middleware',
+  //       description: 'Happened while trying to validate myStore route',
+  //       error: error,
+  //     })
+
+  //     return NextResponse.redirect(new URL('/', req.nextUrl))
+  //   }
+  // }
 
   /**
    * Dont access create store page if user
    * already has a store.
    */
 
-  if (url.includes('/dashboard/createStore')) {
-    const { data, error } = await client.query({
-      query: GET_CURRENT_USER,
-      variables: {
-        username,
-      },
-      fetchPolicy: 'network-only',
-    })
+  // if (url.includes('/dashboard/createStore')) {
+  //   const { data, error } = await client.query({
+  //     query: GET_CURRENT_USER,
+  //     variables: {
+  //       username,
+  //     },
+  //     fetchPolicy: 'network-only',
+  //   })
 
-    if (data.account.store !== null) {
-      return NextResponse.redirect(new URL('/dashboard/myStore', req.nextUrl))
-    }
+  //   if (data.account.store !== null) {
+  //     return NextResponse.redirect(new URL('/dashboard/myStore', req.nextUrl))
+  //   }
 
-    if (error) {
-      console.log({
-        name: 'Error in middleware',
-        description: 'Happened while trying to validate create store route',
-        error: error,
-      })
+  //   if (error) {
+  //     console.log({
+  //       name: 'Error in middleware',
+  //       description: 'Happened while trying to validate create store route',
+  //       error: error,
+  //     })
 
-      return NextResponse.redirect(new URL('/', req.nextUrl))
-    }
-  }
+  //     return NextResponse.redirect(new URL('/', req.nextUrl))
+  //   }
+  // }
 }
-
-// .then(({ data }) => {
-//   if (data.account.store === null) {
-//     return NextResponse.redirect(
-//       new URL('/dashboard/createStore', req.nextUrl),
-//     )
-//   }
-// })
-// .catch((error) => {
-//   console.log({
-//     name: 'Error in middleware',
-//     description: 'Happened while trying to validate myStore route',
-//     error: error,
-//   })
-
-//   return NextResponse.redirect(new URL('/', req.nextUrl))
-// })
-
-// .then(({ data }) => {
-//   if (data.account.store !== null) {
-//     return NextResponse.redirect(
-//       new URL('/dashboard/myStore', req.nextUrl),
-//     )
-//   }
-// })
-// .catch((error) => {
-//   console.log({
-//     name: 'Error in middleware',
-//     description: 'Happened while trying to validate create store route',
-//     error: error,
-//   })
-
-//   return NextResponse.redirect(new URL('/', req.nextUrl))
-// })
