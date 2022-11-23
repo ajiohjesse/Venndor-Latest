@@ -8,7 +8,7 @@ import {
 } from '../graphql/queries/productQueries'
 import SkeletonCard from './SkeletonCard'
 import Input from '../components/ui/Input'
-import HomepageProducts from './HomepageProducts/HomepageProducts'
+import HomepageProducts from './homepageProducts/HomepageProducts'
 
 const RecentlyAdded = () => {
   const [products, setProducts] = useState([])
