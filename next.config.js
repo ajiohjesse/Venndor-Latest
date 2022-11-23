@@ -3,7 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['media.graphcms.com', 'media.graphassets.com'],
+    domains: [
+      'media.graphcms.com',
+      'media.graphassets.com',
+      'images.unsplash.com',
+    ],
   },
   webpack: (config) => {
     config.experiments.topLevelAwait = true

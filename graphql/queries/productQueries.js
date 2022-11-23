@@ -92,3 +92,16 @@ export const GET_PRODUCT = gql`
     }
   }
 `
+export const GET_PRODUCT_BY_CATEGORY = gql`
+  query getProductByCategory($category: String!) {
+    products(where: { category: $category }) {
+      id
+      name
+      price
+      image {
+        url
+        id
+      }
+    }
+  }
+`

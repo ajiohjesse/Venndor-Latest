@@ -8,6 +8,7 @@ import {
 } from '../graphql/queries/productQueries'
 import SkeletonCard from './SkeletonCard'
 import Input from '../components/ui/Input'
+import HomepageProducts from './HomepageProducts/HomepageProducts'
 
 const RecentlyAdded = () => {
   const [products, setProducts] = useState([])
@@ -78,7 +79,7 @@ const RecentlyAdded = () => {
       <div className={styles.container}>
         <div className={styles.heading}>Recently Added</div>
 
-        <div className={styles.paginationWrapper}>
+        {/* <div className={styles.paginationWrapper}>
           <div className={styles.paginationInput}>
             <Input
               type="number"
@@ -109,8 +110,9 @@ const RecentlyAdded = () => {
               </div>
             </div>
           )}
-        </div>
-        <div className={styles.grid}>
+        </div> */}
+
+        {/* <div className={styles.grid}>
           <div className={styles.column}>
             {loading
               ? Array(9)
@@ -133,7 +135,10 @@ const RecentlyAdded = () => {
                     <ProductCard product={product} key={i} />
                   ))}
           </div>
-        </div>
+        </div> */}
+
+        <HomepageProducts products={products} />
+
         <div>
           {!loading && products && (
             <div className={styles.pagination}>

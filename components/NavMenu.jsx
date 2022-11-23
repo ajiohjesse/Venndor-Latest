@@ -35,7 +35,7 @@ const NavMenu = ({ setMenuOpen }) => {
           <span className={styles.itemName}>Marketplace</span>
         </div>
       </li>
-      <li
+      {/* <li
         data-id="products"
         onClick={() => {
           Router.push('/search/products')
@@ -68,7 +68,7 @@ const NavMenu = ({ setMenuOpen }) => {
           </span>
           <span className={styles.itemName}>Search stores</span>
         </div>
-      </li>
+      </li> */}
       <ClientOnly>
         {user && (
           <>
@@ -101,7 +101,7 @@ const NavMenu = ({ setMenuOpen }) => {
                     className={styles.menuIcon}
                   />
                 </span>
-                <span className={styles.itemName}>Store Orders</span>
+                <span className={styles.itemName}>Track Store Orders</span>
               </div>
             </li>
 
@@ -116,7 +116,7 @@ const NavMenu = ({ setMenuOpen }) => {
                 <span className={styles.itemIcon} data-name="marketplace">
                   <FontAwesomeIcon icon={faLink} className={styles.menuIcon} />
                 </span>
-                <span className={styles.itemName}>My Orders</span>
+                <span className={styles.itemName}>Track my Orders</span>
               </div>
             </li>
           </>

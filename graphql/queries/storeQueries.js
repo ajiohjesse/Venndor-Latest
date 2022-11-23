@@ -87,7 +87,12 @@ export const GET_STORE = gql`
 export const GET_ALL_STORES = gql`
   query getAllStores {
     stores {
+      id
       name
+      avatar {
+        id
+        url
+      }
     }
   }
 `
